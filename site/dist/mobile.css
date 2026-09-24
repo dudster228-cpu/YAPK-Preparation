@@ -1,0 +1,48 @@
+@media(max-width:700px){
+  body{background:#f4f7fb}
+  .app{display:block;padding:0;min-width:0}
+  .side,.main{border:0;box-shadow:none;backdrop-filter:none}
+  .side{position:relative;top:auto;height:auto;border-radius:0;padding:14px 14px 12px;background:#fff}
+  .brand{margin-bottom:12px}
+  .logo{width:42px;height:42px;border-radius:12px}
+  .brand h1{font-size:1.05rem}
+  .brand p{font-size:.8rem}
+  .units{display:flex;grid-template-columns:none;gap:8px;margin:12px -14px;padding:0 14px 6px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none}
+  .units::-webkit-scrollbar,.modes::-webkit-scrollbar{display:none}
+  .unit{flex:0 0 220px;min-width:220px;padding:11px;scroll-snap-align:start}
+  .unit small{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .prep-hero{padding:13px 14px;border-radius:14px}
+  .stats{margin-top:9px}
+  .stat{padding:8px 10px}
+  .stat b{font-size:1.1rem}
+  .main{min-height:0;border-radius:0;padding:16px 14px 28px;background:#f4f7fb}
+  .head{display:flex;align-items:flex-start;gap:10px}
+  .head h2{font-size:1.35rem;line-height:1.2}
+  .head p{font-size:.9rem;line-height:1.4}
+  .reset{flex:0 0 auto;margin:0;padding:9px 10px;font-size:.82rem}
+  .modes{flex-wrap:nowrap;overflow-x:auto;margin:16px -14px;padding:0 14px 6px;scroll-snap-type:x proximity;scrollbar-width:none}
+  .mode{flex:0 0 auto;min-height:44px;padding:10px 13px;scroll-snap-align:start}
+  .work{display:block}
+  .panel,.lexicon{border-radius:16px;padding:16px}
+  .panel{min-height:390px}
+  .prompt{font-size:1.65rem;margin:16px 0}
+  .definition{font-size:1rem}
+  .choices{grid-template-columns:1fr;gap:8px}
+  .choice,.primary,.secondary{min-height:48px}
+  .actions{display:grid;grid-template-columns:1fr;gap:8px}
+  .inputrow{display:grid;grid-template-columns:1fr;gap:8px}
+  .inputrow input{min-height:48px;font-size:16px}
+  .match{grid-template-columns:1fr 1fr;gap:7px}
+  .match button{padding:9px 8px;font-size:.9rem}
+  .lexicon{margin-top:14px}
+  .lex-head{align-items:flex-start;flex-direction:column}
+  .lex-head input{max-width:none;width:100%;min-height:44px;font-size:16px}
+  .list{max-height:430px}
+}
+@media(max-width:380px){
+  .head{display:block}
+  .reset{margin-top:10px}
+  .unit{flex-basis:205px;min-width:205px}
+  .match{grid-template-columns:1fr}
+  .panel{min-height:360px}
+}

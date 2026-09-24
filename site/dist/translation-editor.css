@@ -1,0 +1,12 @@
+.edit-translation-button{font-size:.84rem;padding:9px 11px}
+.translation-edit{margin-top:16px;padding:15px;border:1px solid #a8c5dc;border-radius:14px;background:#f3faff}
+.translation-edit label,.translation-edit textarea{display:block;width:100%}
+.translation-edit label{font-weight:700;margin-bottom:8px}
+.translation-edit textarea{box-sizing:border-box;min-height:76px;border:1px solid #a5b7ca;border-radius:10px;padding:10px;font:inherit;resize:vertical}
+.translation-edit-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.translation-edit-actions button{min-height:44px}
+.translation-edit p{margin:8px 0;color:var(--muted)}
+.translation-edit a{display:inline-block;text-decoration:none}
+.word-edit{position:absolute;right:31px;top:8px;border:0;background:transparent;color:#4d6091;font-size:1.05rem;cursor:pointer;padding:2px 5px}
+.word b{padding-right:50px}
+@media(max-width:600px){.translation-edit-actions{display:grid;grid-template-columns:1fr 1fr}.edit-translation-button{font-size:.82rem}}

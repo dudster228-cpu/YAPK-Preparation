@@ -1,0 +1,956 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ЯПК — тренажёр слов</title><meta name="description" content="Тренажёр лексики ЯПК: юниты 4–7, переводы, объяснения, предлоги и мини-игры."><link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%2312213a'/%3E%3Cpath d='M15 17h34v8H15zm0 12h25v7H15zm0 11h34v7H15z' fill='%23ffca58'/%3E%3C/svg%3E"><style>
+@media(max-width:700px){
+  body{background:#f4f7fb}
+  .app{display:block;padding:0;min-width:0}
+  .side,.main{border:0;box-shadow:none;backdrop-filter:none}
+  .side{position:relative;top:auto;height:auto;border-radius:0;padding:14px 14px 12px;background:#fff}
+  .brand{margin-bottom:12px}
+  .logo{width:42px;height:42px;border-radius:12px}
+  .brand h1{font-size:1.05rem}
+  .brand p{font-size:.8rem}
+  .units{display:flex;grid-template-columns:none;gap:8px;margin:12px -14px;padding:0 14px 6px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none}
+  .units::-webkit-scrollbar,.modes::-webkit-scrollbar{display:none}
+  .unit{flex:0 0 220px;min-width:220px;padding:11px;scroll-snap-align:start}
+  .unit small{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .prep-hero{padding:13px 14px;border-radius:14px}
+  .stats{margin-top:9px}
+  .stat{padding:8px 10px}
+  .stat b{font-size:1.1rem}
+  .main{min-height:0;border-radius:0;padding:16px 14px 28px;background:#f4f7fb}
+  .head{display:flex;align-items:flex-start;gap:10px}
+  .head h2{font-size:1.35rem;line-height:1.2}
+  .head p{font-size:.9rem;line-height:1.4}
+  .reset{flex:0 0 auto;margin:0;padding:9px 10px;font-size:.82rem}
+  .modes{flex-wrap:nowrap;overflow-x:auto;margin:16px -14px;padding:0 14px 6px;scroll-snap-type:x proximity;scrollbar-width:none}
+  .mode{flex:0 0 auto;min-height:44px;padding:10px 13px;scroll-snap-align:start}
+  .work{display:block}
+  .panel,.lexicon{border-radius:16px;padding:16px}
+  .panel{min-height:390px}
+  .prompt{font-size:1.65rem;margin:16px 0}
+  .definition{font-size:1rem}
+  .choices{grid-template-columns:1fr;gap:8px}
+  .choice,.primary,.secondary{min-height:48px}
+  .actions{display:grid;grid-template-columns:1fr;gap:8px}
+  .inputrow{display:grid;grid-template-columns:1fr;gap:8px}
+  .inputrow input{min-height:48px;font-size:16px}
+  .match{grid-template-columns:1fr 1fr;gap:7px}
+  .match button{padding:9px 8px;font-size:.9rem}
+  .lexicon{margin-top:14px}
+  .lex-head{align-items:flex-start;flex-direction:column}
+  .lex-head input{max-width:none;width:100%;min-height:44px;font-size:16px}
+  .list{max-height:430px}
+}
+@media(max-width:380px){
+  .head{display:block}
+  .reset{margin-top:10px}
+  .unit{flex-basis:205px;min-width:205px}
+  .match{grid-template-columns:1fr}
+  .panel{min-height:360px}
+}
+
+</style><style>
+.study-tools{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:22px;padding-top:16px;border-top:1px solid var(--line)}
+.study-tool{border:1px solid var(--line);background:#f7f9fc;color:var(--navy);border-radius:11px;padding:10px 13px;font-weight:750;cursor:pointer}
+.study-tool:hover{border-color:#aebce0;background:#eef3ff}.study-tool:disabled{opacity:.45;cursor:not-allowed}
+.study-tool.starred{background:#fff7d8;border-color:#e9c755;color:#725400}.tool-note{color:var(--muted);font-size:.82rem;margin-left:auto}
+.reveal-box{margin-top:15px;padding:14px 16px;border:1px solid #9fc9ef;border-radius:14px;background:#eef8ff;color:#183f60}
+.reveal-box b,.reveal-box span,.reveal-box small{display:block}.reveal-box span{font-size:1.05rem;margin-top:3px}.reveal-box small{margin-top:5px;color:#4b6478}
+.test-progress{height:9px;background:#e9edf4;border-radius:99px;overflow:hidden;margin:12px 0 20px}.test-progress i{display:block;height:100%;background:linear-gradient(90deg,#315efb,#62c9f5)}
+.test-review{display:grid;gap:9px;margin-top:18px}.test-row{padding:12px;border:1px solid var(--line);border-radius:12px}.test-row.ok{border-color:#9dd8c1;background:#f3fbf7}.test-row.bad{border-color:#edacb1;background:#fff5f5}
+.word{position:relative}.word-star{position:absolute;top:8px;right:8px;border:0;background:transparent;color:#b08a00;font-size:1.15rem;cursor:pointer}.word b{padding-right:28px}
+@media(max-width:600px){.study-tools{display:grid;grid-template-columns:1fr 1fr}.study-tool{min-height:48px}.tool-note{grid-column:1/-1;margin:0;text-align:center}.reveal-box{padding:12px}.test-row{font-size:.94rem}}
+
+</style><style>
+.sentence-prompt{font-size:clamp(1.22rem,2.1vw,1.55rem);font-weight:650;line-height:2.45;margin:20px 0;overflow-wrap:anywhere}
+.sentence-gap{display:inline-block;width:105px;max-width:35vw;min-height:44px;margin:0 5px;padding:4px 8px;border:2px solid #9aa9c0;border-radius:9px;background:#fff;color:var(--navy);text-align:center;font-weight:800;vertical-align:middle}
+.sentence-gap:focus{outline:3px solid #315efb44;border-color:var(--blue)}.sentence-gap:disabled{background:#f1f5fa}
+.sentence-hero{margin-top:9px;background:linear-gradient(135deg,#087b78,#159e87);box-shadow:0 10px 24px #159e8733}
+@media(max-width:600px){.sentence-prompt{font-size:1.14rem;line-height:2.25}.sentence-gap{width:82px;min-height:44px}}
+
+</style><style>
+.round-order{display:flex;align-items:center;gap:10px;margin:0 0 16px;color:var(--muted);font-size:.85rem}
+.round-order button{border:1px solid #b7c6e8;background:#eef3ff;color:#173d9b;border-radius:999px;padding:8px 13px;min-height:42px;font-weight:800;cursor:pointer}
+.round-order button[aria-pressed="true"]{background:#173d9b;border-color:#173d9b;color:#fff}
+.round-hint{color:var(--muted);font-size:.88rem;line-height:1.5}
+@media(max-width:600px){.round-order{justify-content:space-between}.round-order button{min-height:48px}.round-hint{font-size:.83rem}}
+
+</style><style>
+.edit-translation-button{font-size:.84rem;padding:9px 11px}
+.translation-edit{margin-top:16px;padding:15px;border:1px solid #a8c5dc;border-radius:14px;background:#f3faff}
+.translation-edit label,.translation-edit textarea{display:block;width:100%}
+.translation-edit label{font-weight:700;margin-bottom:8px}
+.translation-edit textarea{box-sizing:border-box;min-height:76px;border:1px solid #a5b7ca;border-radius:10px;padding:10px;font:inherit;resize:vertical}
+.translation-edit-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.translation-edit-actions button{min-height:44px}
+.translation-edit p{margin:8px 0;color:var(--muted)}
+.translation-edit a{display:inline-block;text-decoration:none}
+.word-edit{position:absolute;right:31px;top:8px;border:0;background:transparent;color:#4d6091;font-size:1.05rem;cursor:pointer;padding:2px 5px}
+.word b{padding-right:50px}
+@media(max-width:600px){.translation-edit-actions{display:grid;grid-template-columns:1fr 1fr}.edit-translation-button{font-size:.82rem}}
+
+.github-export[hidden]{display:none}
+.github-export{margin:0 0 16px}
+</style><style>
+:root{--navy:#12213a;--blue:#315efb;--cyan:#dff4ff;--gold:#ffca58;--muted:#667085;--line:#dfe5ef;--good:#16845b;--bad:#d4434c;--shadow:0 14px 42px #18304f17}*{box-sizing:border-box}body{margin:0;font:16px/1.45 Inter,system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--navy);background:linear-gradient(135deg,#eef5ff,#f8f9fc 45%,#fff8e8);min-height:100vh}button,input{font:inherit}.app{display:grid;grid-template-columns:290px minmax(0,1fr);gap:20px;max-width:1500px;margin:auto;padding:20px}.side,.main{background:#ffffffdf;border:1px solid var(--line);box-shadow:var(--shadow);backdrop-filter:blur(12px)}.side{position:sticky;top:20px;height:calc(100vh - 40px);overflow:auto;border-radius:22px;padding:18px}.brand{display:flex;gap:11px;align-items:center}.logo{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;background:var(--navy);color:var(--gold);font-weight:900}.brand h1{font-size:1.18rem;margin:0}.brand p{margin:2px 0;color:var(--muted);font-size:.88rem}.units{display:grid;gap:9px;margin:20px 0}.unit{border:1px solid var(--line);background:#fff;padding:12px;border-radius:14px;text-align:left;cursor:pointer}.unit.active{border-color:var(--blue);background:#eef3ff}.unit-top{display:flex;justify-content:space-between;font-weight:850}.unit small{display:block;color:var(--muted);margin-top:3px}.bar{display:block;height:7px;background:#e9eef6;border-radius:99px;overflow:hidden;margin-top:9px}.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--blue),#62c9f5)}.prep-hero{width:100%;border:0;border-radius:17px;padding:15px;text-align:left;color:#fff;background:linear-gradient(135deg,#6e44ff,#315efb);cursor:pointer;box-shadow:0 10px 24px #315efb33}.prep-hero b,.prep-hero span{display:block}.prep-hero span{font-size:.83rem;opacity:.86;margin-top:3px}.stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}.stat{background:#f6f8fc;border:1px solid var(--line);border-radius:13px;padding:10px}.stat b{display:block;font-size:1.25rem}.stat span{font-size:.78rem;color:var(--muted)}.main{border-radius:22px;padding:24px;min-height:calc(100vh - 40px)}.head{display:flex;justify-content:space-between;gap:16px;align-items:flex-start}.head h2{margin:0;font-size:clamp(1.5rem,3vw,2.45rem)}.head p{margin:5px 0;color:var(--muted);max-width:720px}.reset{border:1px solid var(--line);background:#fff;border-radius:12px;padding:10px 13px;cursor:pointer}.modes{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0}.mode{border:1px solid var(--line);background:#fff;border-radius:12px;padding:10px 14px;cursor:pointer;font-weight:700}.mode.active{background:var(--navy);color:#fff;border-color:var(--navy)}.mode.game{background:#fff8e5;border-color:#f1d889}.mode.game.active{background:#d89518;color:#fff}.work{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(310px,.85fr);gap:18px}.panel,.lexicon{border:1px solid var(--line);background:#fff;border-radius:18px;padding:22px}.panel{min-height:470px}.eyebrow{text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-size:.76rem;font-weight:850}.prompt{font-size:clamp(1.45rem,3vw,2.35rem);font-weight:850;line-height:1.17;margin:18px 0;overflow-wrap:anywhere}.definition{font-size:1.08rem;color:#344054}.translation{display:inline-flex;padding:7px 11px;border-radius:9px;background:var(--cyan);color:#19445b;font-weight:700}.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:20px}.primary,.secondary{border:0;border-radius:12px;padding:11px 15px;cursor:pointer;font-weight:800}.primary{background:var(--blue);color:#fff}.secondary{background:#eef1f6;color:var(--navy)}.danger{background:#fff0f1;color:var(--bad)}.choices{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}.choice{border:1px solid var(--line);background:#fff;border-radius:13px;padding:13px;text-align:left;cursor:pointer;min-height:58px}.choice.correct{border-color:var(--good);background:#eefaf5}.choice.wrong{border-color:var(--bad);background:#fff1f2}.feedback{margin-top:16px;border:1px dashed var(--line);border-radius:13px;padding:12px 14px;color:var(--muted);min-height:54px}.feedback.good{color:var(--good);background:#f1fbf6;border-color:#8ed4b7}.feedback.bad{color:var(--bad);background:#fff5f5;border-color:#edacb1}.inputrow{display:flex;gap:9px;margin-top:18px}.inputrow input{flex:1;border:1px solid var(--line);border-radius:12px;padding:12px;outline:0}.inputrow input:focus{border-color:var(--blue);box-shadow:0 0 0 4px #315efb17}.lex-head{display:flex;justify-content:space-between;gap:8px;align-items:center;margin-bottom:12px}.lex-head input{max-width:170px;border:1px solid var(--line);border-radius:10px;padding:8px}.list{display:grid;gap:8px;max-height:620px;overflow:auto}.word{border:1px solid var(--line);border-radius:13px;padding:11px}.word b,.word em,.word small{display:block}.word em{font-style:normal;color:#31556b;margin-top:3px}.word small{color:var(--muted);margin-top:3px}.word.known{border-color:#9dd8c1;background:#f3fbf7}.match{display:grid;grid-template-columns:1fr 1fr;gap:10px}.matchcol{display:grid;gap:8px}.match button{border:1px solid var(--line);background:#fff;border-radius:11px;padding:10px;text-align:left;cursor:pointer}.match button.sel{border-color:var(--blue);background:#edf2ff}.match button.done{opacity:.35;pointer-events:none}.timer{height:11px;border-radius:99px;background:#e9edf4;overflow:hidden;margin:12px 0}.timer i{display:block;height:100%;background:linear-gradient(90deg,#ffca58,#f05f68);transition:width .2s}.game-score{font-size:2.8rem;font-weight:900;margin:10px 0}.prep-progress{display:flex;gap:5px;margin:14px 0}.prep-progress i{height:7px;flex:1;border-radius:99px;background:#e8edf5}.prep-progress i.ok{background:var(--good)}.prep-progress i.bad{background:var(--bad)}@media(max-width:980px){.app{grid-template-columns:1fr;padding:12px}.side{position:relative;top:0;height:auto}.work{grid-template-columns:1fr}.units{grid-template-columns:repeat(2,1fr)}}@media(max-width:600px){.main,.side,.panel,.lexicon{padding:14px}.head{display:block}.reset{margin-top:12px}.choices,.match{grid-template-columns:1fr}.inputrow{flex-direction:column}.units{grid-template-columns:1fr}.mode{flex:1 1 44%}}
+</style></head><body><div class="app"><aside class="side"><div class="brand"><div class="logo">ЯПК</div><div><h1>Тренажёр слов</h1><p>Юниты 4–7</p></div></div><div class="units" id="units"></div><button class="prep-hero" id="prepHero"><b>Учить предлоги</b><span>Серии, подсказки и повтор ошибок</span></button><div class="stats"><div class="stat"><b id="known">0</b><span>терминов изучено</span></div><div class="stat"><b id="score">0</b><span>верных ответов</span></div></div></aside><main class="main"><div class="head"><div><h2 id="title"></h2><p id="desc"></p></div><button class="reset" id="reset">Сбросить прогресс</button></div><nav class="modes" id="modes"></nav><div class="work"><section class="panel" id="panel"></section><section class="lexicon"><div class="lex-head"><b id="lexTitle"></b><input id="search" placeholder="Найти слово"></div><div class="list" id="list"></div></section></div></main></div><script>
+const W=(en,ru,def)=>({en,ru,def});
+const units={
+4:{topic:"Responsibility & ethics",desc:"Корпоративная ответственность, право, репутация и устойчивое развитие.",words:[
+W("CSR","корпоративная социальная ответственность","A company's responsibility for its social and environmental impact."),
+W("to conspire with sb","сговориться с кем-либо","To secretly plan an illegal or harmful act with someone."),
+W("to indict sb on charges","официально обвинить","To formally accuse someone of a crime."),
+W("insider trading","инсайдерская торговля","Illegal trading based on confidential company information."),
+W("controversy about sth","спор вокруг чего-либо","Strong public disagreement about an issue."),
+W("industrial accident","авария на производстве","An accident connected with industrial work."),
+W("high-profile official","высокопоставленный чиновник","A well-known person holding an important public position."),
+W("jail time","тюремный срок","A period that a person must spend in prison."),
+W("a fraud","мошенник; обман","A person or action intended to deceive for gain."),
+W("to defraud sb","обмануть ради денег","To illegally take money by deceiving someone."),
+W("to conceal","скрывать","To prevent information from becoming known."),
+W("to reveal","раскрывать","To make hidden information known."),
+W("to imprison sb","заключить в тюрьму","To put someone in prison."),
+W("environmental disaster","экологическая катастрофа","An event causing severe harm to nature."),
+W("environmental record","экологическая репутация","A history of a company's environmental behaviour."),
+W("detrimental effect","пагубное воздействие","An effect that causes harm or damage."),
+W("gross negligence","грубая халатность","A very serious failure to take proper care."),
+W("willful conduct","умышленные действия","Behaviour done deliberately rather than by accident."),
+W("to reverse the damage","устранить ущерб","To undo or repair harm that has been caused."),
+W("reckless","безрассудный","Showing no care about danger or consequences."),
+W("to leverage money into sth","использовать деньги для большей выгоды","To use money to obtain a larger advantage."),
+W("to pocket money","присвоить деньги","To take money dishonestly for yourself."),
+W("to falsify records","подделать документы","To change records so they contain false information."),
+W("to perpetrate a crime","совершить преступление","To commit an illegal act."),
+W("money laundering","отмывание денег","Hiding the criminal origin of money."),
+W("fatal flaw","критический недостаток","A defect serious enough to cause complete failure."),
+W("loophole in legislation","лазейка в законодательстве","A gap in a law that allows its purpose to be avoided."),
+W("greenwashing","гринвошинг","Misleading claims that make a company look environmentally friendly."),
+W("labour abuse","эксплуатация работников","Unfair or harmful treatment of workers."),
+W("misconduct","неправомерное поведение","Unacceptable or illegal behaviour."),
+W("code of ethics","этический кодекс","Rules describing acceptable moral behaviour."),
+W("tax avoidance","уход от налогов законными способами","Using legal methods to reduce tax."),
+W("tax evasion","уклонение от налогов","Illegally avoiding tax payments."),
+W("conflict of interest","конфликт интересов","A situation where personal interests may affect judgement."),
+W("to blacklist sb","внести в чёрный список","To exclude someone because they are considered unacceptable."),
+W("full-fledged","полноценный","Completely developed or fully qualified."),
+W("meticulously planned","тщательно спланированный","Prepared with very careful attention to detail."),
+W("M&A","слияния и поглощения","Mergers and acquisitions of companies."),
+W("a proponent","сторонник","A person who publicly supports an idea."),
+W("to get away with sth","остаться безнаказанным","To avoid punishment for something wrong."),
+W("to reap rewards","пожинать плоды","To receive benefits from earlier effort."),
+W("trade-off","компромисс","A balance in which one benefit is exchanged for another."),
+W("sustainable development","устойчивое развитие","Development that meets current needs without harming the future."),
+W("SDGs","цели устойчивого развития","The United Nations Sustainable Development Goals."),
+W("emerging economy","развивающаяся экономика","An economy growing rapidly toward an advanced level."),
+W("to scramble for sth","бороться за что-либо","To compete urgently to obtain something."),
+W("to ally with","объединиться с","To join another person or organisation for a common purpose."),
+W("volatile","нестабильный","Likely to change suddenly and unpredictably."),
+W("stakeholder analysis","анализ заинтересованных сторон","A study of people affected by a decision."),
+W("ESG investing","инвестирование по критериям ESG","Investing based on environmental, social and governance factors."),
+W("mutual benefit","взаимная выгода","An advantage received by all sides."),
+W("futile efforts","тщетные усилия","Attempts that cannot produce a useful result.")
+],preps:[["controversy ___ the value","about"],["___ the bounds of the law","within"],["bear up ___ careful scrutiny","under"],["to be ___ large","at"],["a mindset ___ officials","among"],["a trade-off ___ human rights and security","between"],["a query ___ the role","about"],["restitution ___ the bank","to"],["scramble ___ analysis","for"],["insight ___ priorities","into"],["reimburse him ___ gas","for"],["convert ___ new customers","to"],["align ___ the framework","with"],["compensation ___ loss of revenue","for"]]},
+5:{topic:"Finance",desc:"Деньги, долги, банки, финансовая грамотность и финансовые технологии.",words:[
+W("time for the great reckoning","время отвечать за ошибки","A moment when past actions must be faced and judged."),
+W("to be subject to sth","подлежать; зависеть от","To be affected by a rule, condition or event."),
+W("in the wake of sth","в результате чего-либо","Following something, usually as a consequence."),
+W("to encompass","охватывать","To include a wide range of things."),
+W("financial literacy","финансовая грамотность","The ability to understand and manage money."),
+W("at its core","по своей сути","In the most basic or central part."),
+W("to shake sth to its core","потрясти до основания","To affect something in a deep and fundamental way."),
+W("to facilitate","облегчать; способствовать","To make a process easier."),
+W("to accrue interest on debts","начислять проценты по долгам","To accumulate interest that must be paid on debt."),
+W("far-reaching implications","далеко идущие последствия","Consequences affecting many people or areas."),
+W("to attune to","настроиться на","To become sensitive or responsive to something."),
+W("to pertain to","относиться к","To be connected with a subject."),
+W("to resort to","прибегнуть к","To use something because other options failed."),
+W("store of value","средство сбережения","An asset that keeps its value over time."),
+W("to turn a profit on sth","получить прибыль от","To earn more money than was spent."),
+W("to freak sb out","сильно встревожить","To make someone very anxious or afraid."),
+W("to boil down to","сводиться к","To have one main cause or meaning."),
+W("to save up","копить","To keep money until enough has been collected."),
+W("to knock out","быстро произвести","To produce something quickly and in quantity."),
+W("to buy up","скупить","To buy all or most of what is available."),
+W("medium of exchange","средство обмена","Something widely accepted for buying and selling."),
+W("unit of account","расчётная единица","A standard measure used to state prices and value."),
+W("standardised metric","стандартизированный показатель","A consistent measure used for comparison."),
+W("counterfeit","поддельный","Made illegally to look like the original."),
+W("speculative asset","спекулятивный актив","An asset bought mainly in hope of a price rise."),
+W("gold standard","золотой стандарт","A system linking money's value to gold."),
+W("redeemable for gold","обмениваемый на золото","Able to be exchanged for a fixed amount of gold."),
+W("roller-coaster ride","резкие взлёты и падения","A situation with many sudden changes."),
+W("to issue debts","выпускать долговые обязательства","To create formal obligations to repay money."),
+W("barter system","бартерная система","Direct exchange of goods without money."),
+W("overdue rates","просроченные платежи","Payments that have not been made by the deadline."),
+W("tuition fees","плата за обучение","Money paid for education."),
+W("a wad of money","пачка денег","A thick bundle of banknotes."),
+W("to succumb to pressure","поддаться давлению","To stop resisting pressure."),
+W("to splurge","тратить без меры","To spend a lot of money on something enjoyable."),
+W("to stock up","запастись","To buy and store a large amount."),
+W("to fall for sth","поверить в обман","To be tricked into believing something."),
+W("to get out of debt","выйти из долгов","To repay all money owed."),
+W("wage slavery","долговая зависимость от работы","Dependence on wages with little freedom."),
+W("portfolio of assets","портфель активов","A collection of investments owned by a person."),
+W("compound interest","сложный процент","Interest calculated on both principal and earlier interest."),
+W("emergency fund","резервный фонд","Money saved for unexpected expenses."),
+W("precarious income","нестабильный доход","Income that is uncertain and insecure."),
+W("passive income","пассивный доход","Money earned with little continuing effort."),
+W("open banking","открытый банкинг","Secure sharing of bank data with approved services."),
+W("financial landscape","финансовая среда","The overall structure and trends of finance."),
+W("cashless payments","безналичные платежи","Payments made without physical money."),
+W("customer-centric banking","клиентоориентированный банкинг","Banking designed around customer needs."),
+W("to mushroom","стремительно расти","To increase very quickly."),
+W("to disrupt an industry","радикально изменить отрасль","To transform an established market with a new model."),
+W("robo-advisor","робот-консультант","Software that gives automated investment advice."),
+W("a loan default","невыполнение обязательств по кредиту","Failure to make required loan payments."),
+W("to hit a dead-end","зайти в тупик","To reach a point where progress is impossible.")
+],preps:[["be subject ___ regulation","to"],["___ the wake of the crisis","in"],["shake the market ___ its core","to"],["interest ___ debts","on"],["implications ___ consumers","for"],["attune ___ new risks","to"],["pertain ___ finance","to"],["resort ___ borrowing","to"],["turn a profit ___ the deal","on"],["trade ___ goods","for"],["struggle ___ high debt loads","with"],["enrol ___ a university","in"],["take care ___ personal finances","of"],["a hedge ___ volatility","against"],["cater ___ customers' needs","to"]]},
+6:{topic:"Digitalisation",desc:"Интернет-реклама, цифровые технологии, новые рынки и технологические риски.",words:[
+W("to glimpse the future","увидеть проблеск будущего","To see a small sign of what may happen later."),
+W("yellow pages","справочник организаций","A printed directory of businesses and phone numbers."),
+W("to be hip to sth","быть в тренде","To be fashionable or aware of the latest ideas."),
+W("to subscribe to sth","подписаться на","To arrange to receive a service or content."),
+W("to hook sb","зацепить внимание","To attract and keep someone's interest."),
+W("gripping","захватывающий","Very interesting and difficult to stop watching."),
+W("to be inundated with sth","быть заваленным чем-либо","To receive too much of something."),
+W("ubiquitous","повсеместный","Present or found everywhere."),
+W("cold call","холодный звонок","An unexpected sales call to a potential customer."),
+W("would-be customers","потенциальные клиенты","People who may become customers."),
+W("to saturate a market","насытить рынок","To fill a market so that little demand remains."),
+W("content management system","система управления контентом","Software used to create and manage digital content."),
+W("click-through rate","коэффициент кликабельности","The percentage of viewers who click a link or ad."),
+W("banner ad","баннерная реклама","A graphic advertisement displayed online."),
+W("lucrativeness","прибыльность","The ability to produce a large profit."),
+W("search advertising","поисковая реклама","Ads displayed next to search results."),
+W("text snippet","фрагмент текста","A short extract shown from a larger text."),
+W("Pay-Per-Click","оплата за клик","Advertising in which each click costs money."),
+W("dotcom bubble","пузырь доткомов","The rapid rise and crash of internet-company values."),
+W("recession","экономический спад","A period when economic activity declines."),
+W("nonintrusive","ненавязчивый","Not disturbing or forcing attention."),
+W("to piggyback on sth","использовать как основу","To benefit from another system or success."),
+W("household word","общеизвестное название","A name known by almost everyone."),
+W("two-way street","взаимный процесс","A situation requiring effort from both sides."),
+W("vicious cycle","порочный круг","A chain of problems that continually makes itself worse."),
+W("pundit","эксперт-комментатор","A person who publicly gives expert opinions."),
+W("to cause mayhem","создать хаос","To cause serious confusion and disorder."),
+W("to be constrained by sth","быть ограниченным чем-либо","To have freedom limited by something."),
+W("social bookmarking","социальные закладки","Saving and sharing web links online."),
+W("user generated content","пользовательский контент","Content created by users rather than a company."),
+W("viral marketing","вирусный маркетинг","Marketing spread quickly by people sharing it."),
+W("to factor in","учесть","To include something in a calculation or decision."),
+W("to factor out","исключить фактор","To remove an influence from an analysis."),
+W("Internet of Things","интернет вещей","A network of physical devices connected to the internet."),
+W("to work remotely","работать удалённо","To work away from a central office."),
+W("to disaggregate risks","разделить риски на составляющие","To separate risks into smaller categories."),
+W("pinch point","узкое место","A point where a process slows or fails."),
+W("feasibility study","технико-экономическое обоснование","A study of whether a plan is practical."),
+W("return on investment","окупаемость инвестиций","Profit compared with the money invested."),
+W("inevitable","неизбежный","Certain to happen and impossible to avoid."),
+W("to roll out","запустить; внедрить","To introduce a new product or service."),
+W("at a breakneck speed","с головокружительной скоростью","Extremely quickly."),
+W("proliferation","быстрое распространение","A rapid increase in number or amount."),
+W("to soar","резко вырасти","To increase very quickly to a high level."),
+W("augmented reality","дополненная реальность","Technology adding digital elements to the real world."),
+W("immersive experience","эффект погружения","An experience that deeply involves the user."),
+W("blockchain","блокчейн","A shared digital record of transactions."),
+W("to pose a risk","создавать риск","To create a possible danger or problem."),
+W("disreputable","имеющий плохую репутацию","Not trusted because of dishonest behaviour."),
+W("deceptive practice","обманная практика","A method intended to mislead people."),
+W("brand ambassador","амбассадор бренда","A person who publicly represents a brand."),
+W("tip of the iceberg","вершина айсберга","A small visible part of a much larger problem."),
+W("digital identity","цифровая идентичность","Information that represents a person online."),
+W("to prevail over","преобладать над","To be more powerful or successful than something."),
+W("to gain an edge","получить преимущество","To obtain an advantage over competitors."),
+W("sharing economy","шеринговая экономика","An economy based on sharing access to assets."),
+W("far-fetched","неправдоподобный","Very unlikely and difficult to believe."),
+W("ledger","учётная книга","A record of financial transactions."),
+W("disruptive technology","революционная технология","Technology that radically changes an existing market."),
+W("unsolicited","непрошенный","Not asked for or wanted."),
+W("to fuel controversy","подогреть спор","To make public disagreement stronger.")
+],preps:[["subscribe ___ a channel","to"],["be inundated ___ messages","with"],["piggyback ___ a trend","on"],["account ___ 60% of the workforce","for"],["come up ___ the right words","with"],["factor ___ inflation","in"],["factor ___ unusual effects","out"],["tangle ___ competitors","with"],["bid ___ a contract","for"],["contrary ___ expectations","to"],["constrained ___ limited capacity","by"],["slide ___ recession","into"],["information ___ the internet","on"],["available ___ consideration","for"],["return ___ investment","on"],["subscribe ___ notifications","to"]]},
+7:{topic:"Customer engagement",desc:"Каналы продаж, лояльность, электронная коммерция и работа с клиентами.",words:[
+W("Aladdin's cave","пещера сокровищ","A place full of interesting or valuable objects."),
+W("to capture one's eyeballs","привлечь внимание","To make someone look at or notice something."),
+W("at one's fingertips","под рукой","Immediately available and easy to use."),
+W("unprecedented level","беспрецедентный уровень","A level higher than anything seen before."),
+W("in response to","в ответ на","As a reaction to something."),
+W("cheesy","дешёвый и безвкусный","Of poor quality and lacking good taste."),
+W("mail-order catalogue","каталог почтовых заказов","A catalogue used to order goods for delivery."),
+W("to expand into product lines","расшириться на новые товары","To enter additional categories of products."),
+W("IPO","первичное публичное размещение","The first public sale of a company's shares."),
+W("to go public","выйти на биржу","To begin selling a company's shares publicly."),
+W("serendipity","счастливая случайность","A pleasant discovery made by chance."),
+W("home-shopping channel","телемагазин","A TV channel used to sell products."),
+W("savvy consumer","опытный покупатель","A consumer with practical knowledge and good judgement."),
+W("meticulous attention to detail","тщательное внимание к деталям","Extremely careful focus on small details."),
+W("rigorous testing","строгое тестирование","Thorough testing using strict standards."),
+W("brick-and-mortar store","обычный физический магазин","A shop located in a physical building."),
+W("payment after delivery","оплата после доставки","A method allowing payment after goods arrive."),
+W("obsolete","устаревший","No longer useful because something newer exists."),
+W("direct marketing","прямой маркетинг","Selling directly to selected customers."),
+W("to shrink","сокращаться","To become smaller in size or amount."),
+W("shrinkage","сокращение; потери товара","A reduction, including retail loss through theft or damage."),
+W("to align with one's values","соответствовать ценностям","To match what a person believes is important."),
+W("to resonate with sb","находить отклик у","To create a strong emotional connection."),
+W("to flick through","пролистать","To look quickly through pages."),
+W("to capitalise on","извлечь выгоду из","To use a situation to gain an advantage."),
+W("to draw on","опираться на","To use experience, knowledge or resources."),
+W("to lay the foundations for","заложить основы","To create the basic structure for future development."),
+W("pop-up ad","всплывающая реклама","An online advertisement appearing over content."),
+W("brand affinity","привязанность к бренду","A customer's emotional preference for a brand."),
+W("omnichannel","омниканальный","Connecting all sales and communication channels."),
+W("to captivate customers","захватить внимание клиентов","To hold customers' interest completely."),
+W("a laundry list","длинный список","A long list of items, often too many."),
+W("to hit the ground running","быстро включиться в работу","To begin a new activity effectively at once."),
+W("compelling","убедительный; захватывающий","Strong enough to hold attention or persuade."),
+W("stroke of genius","гениальная идея","A sudden and extremely clever idea."),
+W("to make concessions","пойти на уступки","To give something up to reach agreement."),
+W("to streamline","оптимизировать","To make a process simpler and more efficient."),
+W("formidable obstacle","серьёзное препятствие","A difficult and powerful challenge."),
+W("to set off","привести в действие","To cause an event or process to begin."),
+W("to set up","создать; организовать","To arrange or establish something."),
+W("to go a long way","сильно помочь","To be very helpful in achieving success."),
+W("to have sth in your pocket","иметь успех почти в кармане","To be almost certain to win or succeed."),
+W("in one's back pocket","про запас","Ready and available when needed."),
+W("at the end of the day","в конечном счёте","Used before stating the most important fact."),
+W("to be in the same boat","быть в одинаковой ситуации","To share the same difficult situation."),
+W("to drop a bombshell","сообщить сенсационную новость","To suddenly reveal shocking information."),
+W("at the core of sth","в основе чего-либо","In the central or most important part."),
+W("lead / prospect / client","лид / потенциальный клиент / клиент","Stages of a person becoming a customer."),
+W("giveaways and freebies","подарки и бесплатные образцы","Items given free to attract customers."),
+W("coordinated customer experience","согласованный клиентский опыт","A consistent experience across all channels."),
+W("livestream shopping","продажи в прямом эфире","Selling products during a live online broadcast."),
+W("to boost sales","увеличить продажи","To cause sales to rise."),
+W("to earn a commission","получать комиссию","To receive a percentage of a sale."),
+W("inventory","товарные запасы","Goods a business has available for sale."),
+W("multi-vendor platform","платформа с несколькими продавцами","A marketplace serving many sellers."),
+W("on-demand","по запросу","Available whenever a customer asks for it."),
+W("ocean strategy","стратегия нового рынка","A strategy focused on creating uncontested market space.")
+],preps:[["___ response to complaints","in"],["available ___ your fingertips","at"],["sell ___ a catalogue","via"],["purchase items ___ catalogues","from"],["expand ___ product lines","into"],["shop ___ home","from"],["attention ___ detail","to"],["align ___ one's values","with"],["resonate ___ customers","with"],["shrink ___ 20%","by"],["capitalise ___ knowledge","on"],["draw ___ savings","on"],["lay the foundations ___ growth","for"],["interaction ___ customers","with"],["connection ___ a customer","to"],["be ___ the core of the brand","at"],["earn commission ___ sales","on"]]}
+};
+
+</script><script>
+const extra={
+4:[
+["to hit sb with charges","предъявить кому-либо обвинения","To formally accuse someone of a crime."],["to accuse sb of sth","обвинить кого-либо в чём-либо","To say that someone has done something wrong."],["to charge sb with sth","предъявить обвинение","To officially state that someone has committed a crime."],["to dog sb with accusations","преследовать обвинениями","To trouble someone repeatedly with accusations."],["fraudster","мошенник","A person who commits fraud."],["defrauded","обманутый мошенниками","Cheated illegally out of money or property."],["to pull off a scam","успешно провернуть аферу","To successfully carry out a dishonest scheme."],["to perpetrate a lie","распространять ложь","To create or continue a serious lie."],["to sentence sb to prison","приговорить к тюрьме","To order a convicted person to spend time in prison."],["to put sb behind bars","посадить за решётку","To send someone to prison."],["to neglect","пренебрегать обязанностями","To fail to give proper care or attention."],["fine","штраф","Money paid as punishment for breaking a rule."],["to build goodwill","укреплять доброе имя","To create trust and a positive reputation."],["brand equity","ценность бренда","The commercial value created by a strong brand."],["to draw a line between","провести границу между","To distinguish clearly between two things."],["environmentalism","защита окружающей среды","Concern and action aimed at protecting nature."],["to justify sth","обосновать что-либо","To show that something is reasonable or right."],["to spark interest in","вызвать интерес к","To cause people to become interested in something."],["legal ramifications","правовые последствия","Legal results that follow an action or decision."],["to go under careful scrutiny","подвергнуться тщательной проверке","To be examined very carefully."],["to tighten regulations","ужесточить нормы","To make official rules stricter."],["carbon footprint","углеродный след","The amount of greenhouse gas caused by an activity."],["identity theft","кража персональных данных","The crime of using another person's identity."],["to glean data","собирать данные по частям","To collect information gradually from several sources."],["to bring down sb","свергнуть; погубить кого-либо","To cause a person or organisation to lose power."],["to end up","в итоге оказаться","To finally reach a particular situation."],["to trace back","проследить происхождение","To find the origin of something in the past."],["to come about","произойти","To happen or develop."],["the gig is up","обман раскрыт","Used when a secret or illegal activity has been discovered."],["to make a fuss about","поднимать шум из-за","To react too strongly to something."],["Search Engine Optimisation (SEO)","поисковая оптимизация","Methods used to improve a site's search ranking."],["black hat SEO","нечестная поисковая оптимизация","Search techniques that break search-engine rules."],["white hat SEO","этичная поисковая оптимизация","Search techniques that follow accepted rules."],["to employ techniques","применять методы","To use particular methods to achieve a result."],["to bar sth","запретить что-либо","To officially prevent an activity."],["to ban sth","наложить запрет","To state officially that something is not allowed."],["to blackball sb","не допустить кого-либо","To reject or exclude someone by agreement."],["to label sb","навесить ярлык","To describe someone with a fixed, often unfair, category."],["to install spyware","установить шпионское ПО","To put software on a device that secretly gathers data."],["to answer a query","ответить на запрос","To provide information requested in a question."],["within the bounds of","в пределах","Inside the permitted limits of something."],["link farm","сеть сайтов со ссылками","A group of sites created to manipulate search rankings."],["meticulously","тщательно","With extreme care and attention to detail."],["to merge with/into","объединиться с","To combine companies or organisations."],["merged entity","объединённая организация","An organisation formed by combining previous ones."],["to come down to","сводиться к","To depend mainly on one important fact."],["to come at the expense of","происходить за счёт","To be achieved by causing loss or harm elsewhere."],["fair wage","справедливая оплата труда","Pay that reasonably reflects the work performed."],["fair trade","справедливая торговля","Trade designed to give producers fair conditions."],["fair treatment","справедливое отношение","Equal and reasonable treatment of people."],["to reimburse sb for sth","возместить расходы","To repay money that someone has spent."],["to recoup sth","возместить потери","To recover money that was spent or lost."],["share scheme","программа участия в капитале","A plan allowing employees to receive company shares."],["communal space","общее пространство","An area shared by members of a community."],["to source materials","закупать материалы","To find and obtain materials from suppliers."],["to take a stance against","выступить против","To publicly oppose something."],["ethical credentials","подтверждение этичности","Evidence that a person or company behaves ethically."],["profit margin","маржа прибыли","The share of revenue that remains as profit."],["to charge a price for","назначить цену за","To ask a particular amount of money for something."],["to align with","соответствовать","To match a rule, value or objective."],["free enterprise","свободное предпринимательство","An economic system based on private business and competition."],["to take central stage","занять центральное место","To become the main focus of attention."],["to provide insight into","дать представление о","To help someone understand something better."],["to have the moral high ground","иметь моральное превосходство","To hold the stronger ethical position."],["within the framework","в рамках","Inside an established system of rules or ideas."],["sustainability","устойчивость","The ability to continue without exhausting resources."],["additive","добавка","A substance added to improve or preserve a product."],["conventional","традиционный","Based on established and widely used methods."],["fertiliser","удобрение","A substance added to soil to help plants grow."],["to convert to sth","преобразовать во что-либо","To change something into another form."],["recycled","переработанный","Processed so that material can be used again."],["to compromise sth","поставить под угрозу","To weaken, damage or endanger something."],["to be at large","находиться на свободе","Not captured or still free."],["to require by law","требовать по закону","To make something legally compulsory."],["to rebound","восстановиться после падения","To rise again after a decline."],["to sacrifice","жертвовать","To give up something valuable for another purpose."],["to trigger a scandal","спровоцировать скандал","To cause a scandal to begin."],["to escalate a scandal","усугубить скандал","To make a scandal more serious."],["environmentally sound","экологически безопасный","Designed to cause little or no environmental harm."],["to do well","преуспевать","To be successful, especially financially."],["to do good","приносить пользу","To have a positive social effect."],["eco-friendly","экологичный","Causing little harm to the environment."],["repercussion","последствие","An indirect, often negative, result of an event."],["ethicist","специалист по этике","A person who studies moral principles."],["mutual understanding","взаимопонимание","Shared understanding between people or groups."],["to foster a mindset","формировать образ мышления","To encourage a particular way of thinking."],["to fizzle out","постепенно сойти на нет","To gradually become weaker and end."],["to come to light","стать известным","To become publicly known."],["a deterrent against","сдерживающая мера против","Something that discourages an action through fear of consequences."],["to seek compensation","добиваться компенсации","To request payment for loss or damage."],["manslaughter","непредумышленное убийство","The unlawful killing of a person without prior intent."],["to settle litigation","урегулировать судебный спор","To resolve a legal dispute before final judgement."],["to file a lawsuit","подать иск","To start a legal case in court."],["to dismiss a lawsuit","отклонить иск","To officially end a court case."],["to serve justice","осуществить правосудие","To ensure that law and fairness are applied."],["allegations of corruption","обвинения в коррупции","Claims that corrupt behaviour has occurred."],["to testify","давать показания","To give evidence in court."],["to inflate assets","завышать стоимость активов","To report assets at an artificially high value."],["a recourse against","средство защиты от","A legal or practical way to obtain help or protection."],["restitution to sb","возмещение кому-либо","Payment or action that repairs loss or damage."]
+],
+5:[
+["roller-coaster ride","резкие взлёты и падения","A situation with frequent and extreme changes."],["to account for one's actions","отвечать за свои действия","To explain or accept responsibility for what one has done."],["to fulfil obligations","выполнять обязательства","To do what a duty or agreement requires."],["personal finance","личные финансы","The management of an individual's money."],["public finance","государственные финансы","Government income, spending and debt."],["to manage funds and capital","управлять средствами и капиталом","To control money and financial resources."],["to generate profits","получать прибыль","To produce earnings above costs."],["to replace bartering","заменить бартер","To take the place of direct exchange of goods."],["to facilitate convenient transactions","упрощать удобные сделки","To make payments and exchanges easier."],["to issue debts","выпускать долговые обязательства","To create formal obligations to repay money."],["public debt management","управление госдолгом","The planning and control of government borrowing."],["financial insecurity","финансовая незащищённость","Uncertainty about having enough money."],["to invest in oneself","инвестировать в себя","To spend resources on one's own skills or education."],["wreckage of banks","крах банков","Severe damage left after banks fail."],["under no circumstances","ни при каких обстоятельствах","Used to say something must never happen."],["barter system","бартерная система","A system of exchanging goods without money."],["to pay sb with money","заплатить кому-либо деньгами","To give money in return for work or goods."],["to serve a purpose","служить цели","To be useful for a particular aim."],["to act as a medium of exchange","служить средством обмена","To be used for buying and selling."],["to serve as a unit of account","служить расчётной единицей","To provide a standard way to express value."],["standardised metric","стандартизированный показатель","A consistent measure used for comparison."],["to issue and endorse cash and coins","выпускать наличные и монеты","To authorise and provide official physical money."],["to put sth in place","ввести что-либо","To establish a system or arrangement."],["physically durable","физически долговечный","Able to remain usable despite physical wear."],["hard to counterfeit","сложно подделать","Difficult to copy illegally."],["direct deposit","прямое зачисление","An electronic payment made directly to a bank account."],["to accept sth as payment","принимать в качестве оплаты","To agree to receive something in exchange for goods."],["to move off the gold standard","отказаться от золотого стандарта","To stop linking currency value to gold."],["tangible backing","материальное обеспечение","Physical value supporting money or an asset."],["to stick in one's mind","запомниться","To remain clearly in someone's memory."],["words stuck in one's throat","слова застряли в горле","Used when someone finds it difficult to speak."],["to move around","перемещаться","To travel between different places."],["to lie within one's reach","быть достижимым","To be close enough or possible to obtain."],["corresponding responsibility","соответствующая ответственность","A duty that comes together with an opportunity."],["within reasonable distance","на разумном расстоянии","Close enough to reach without excessive effort."],["overdue rates","просроченные платежи","Payments that have not been made by the deadline."],["rent and utility bills","аренда и коммунальные счета","Regular payments for housing, electricity, heating and water."],["tuition fees","плата за обучение","Money paid for education."],["nothing but","ничего кроме","Only the thing mentioned."],["a limp, twisted wad of money","смятая пачка денег","A bent and untidy bundle of banknotes."],["to start early on in life","начать в раннем возрасте","To begin doing something while still young."],["to carry through to adulthood","пронести во взрослую жизнь","To continue a habit or effect into adult life."],["to enrol in a university","поступить в университет","To officially become a university student."],["to graduate from a university","окончить университет","To complete a university course successfully."],["fad","кратковременная мода","A style or interest popular for a short time."],["to stretch money","растянуть бюджет","To make a limited amount of money last longer."],["to scrimp and save","экономить на всём","To spend very little in order to save."],["to take care of personal finances","управлять личными финансами","To manage one's money responsibly."],["to wear on","тянуться мучительно долго","To pass slowly and become tiring."],["to kick in","начать действовать","To begin to have an effect."],["to stack up","накапливаться","To increase in number or amount."],["to be in fear about money","бояться за деньги","To feel anxious about one's financial situation."],["to go into debt","влезть в долги","To begin owing money."],["to be in debt","быть в долгах","To owe money to another person or institution."],["to flatten one's debt","сократить долг","To reduce the size of a debt."],["to tumble back into debt","снова скатиться в долги","To return quickly to a state of debt."],["to drive sb into wage slavery","загнать в долговую зависимость","To make someone dependent on wages and debt."],["to be amiss","быть неправильным","To be wrong or not as expected."],["to frame things narrowly","рассматривать узко","To describe or understand something from a limited view."],["to take a broad view","смотреть широко","To consider many aspects of a situation."],["to recur throughout life","повторяться на протяжении жизни","To happen repeatedly during a person's life."],["to distinguish between","различать","To recognise the difference between things."],["to free one's mind from","освободить мысли от","To stop thinking about something limiting."],["a presumption","предположение","A belief accepted before there is proof."],["at the low end","в нижней части диапазона","Near the smallest value in a range."],["at the high end","в верхней части диапазона","Near the largest value in a range."],["sovereign","суверенный","Having independent authority."],["sovereignty","суверенитет","The right of a state to govern itself."],["tchotchke","безделушка","A small decorative object of little value."],["knick-knack","безделушка","A small ornamental object."],["liquid assets","ликвидные активы","Assets that can quickly be converted to cash."],["surplus savings","избыточные сбережения","Savings beyond immediate needs."],["systematic saver","систематически откладывающий человек","A person who saves money regularly."],["obsessive saver","чрезмерно экономный человек","A person who saves money to an extreme degree."],["numeracy","умение работать с числами","The ability to understand and use numbers."],["credit card borrower","заёмщик по кредитной карте","A person who borrows through a credit card."],["to project onto money","переносить чувства на деньги","To attach personal feelings or ideas to money."],["to do bidding","участвовать в торгах","To make offers in a competitive sale or contract."],["to pay rent or mortgage","платить аренду или ипотеку","To make regular housing payments."],["inordinate amount of money","чрезмерная сумма денег","An unusually or unreasonably large amount."],["to circle up","собраться в круг","To gather closely as a group."],["to reflect on","обдумать","To think carefully about something."],["to play out","истощиться; завершиться","To develop fully or use up available energy."],["to throw off results","исказить результаты","To make results inaccurate."],["nuts and bolts","практические основы","The basic practical details of something."],["buffer against expenses","защита от расходов","Money or resources kept for unexpected costs."],["to hedge against the unexpected","страховаться от неожиданного","To reduce exposure to unexpected loss."],["conspicuous changes","заметные изменения","Changes that are easy to see."],["advent of technology","появление технологии","The arrival or beginning of a new technology."],["to be in store for sb","ожидать кого-либо впереди","To be likely to happen to someone."],["riveting development","захватывающее развитие","A change that holds strong attention."],["to share data securely","безопасно делиться данными","To transfer information while protecting it."],["personalised user-friendly services","персонализированные удобные услуги","Services adapted to users and easy to use."],["money management dashboard","панель управления финансами","A screen showing financial information and controls."],["to tailor services to needs","адаптировать услуги под потребности","To adjust services for a particular client."],["to put behaviour under scrutiny","тщательно изучать поведение","To examine behaviour very carefully."],["to incentivise responsible lending","стимулировать ответственное кредитование","To encourage safer lending practices."],["to reduce bias","снижать предвзятость","To make decisions less unfair."],["balance inquiry","запрос баланса","A request to see the amount in an account."],["to cater to unique needs","учитывать особые потребности","To provide what a specific customer requires."],["to morph","постепенно превращаться","To change gradually into another form."],["every now and then","время от времени","Occasionally."],["to customise services","настраивать услуги","To adapt services for individual users."],["to spur the financial landscape","ускорить изменения финансовой среды","To stimulate development in finance."],["self-directed bank account","самостоятельно управляемый счёт","An account controlled directly by the customer."],["unique offering","уникальное предложение","A product or service unlike competitors' offers."],["to pay with one's phone","платить телефоном","To make a payment using a mobile device."],["to transfer money using an app","перевести деньги через приложение","To send money with mobile software."],["bank statement","банковская выписка","A record of transactions in an account."],["Kickstarter campaign","кампания на Kickstarter","A crowdfunding project seeking public support."],["payment and lending technologies","платёжные и кредитные технологии","Digital tools for payments and loans."],["to go big on sth","сделать большую ставку на","To invest heavily in or strongly support something."],["to lead the way","быть лидером","To be the first or most advanced."],["to fill a void","заполнить пробел","To provide something that was missing."],["to take out a loan","взять кредит","To borrow money formally."],["to lift households out of poverty","вывести семьи из бедности","To improve family income above poverty level."],["robo-advisor","робот-консультант","Software providing automated financial advice."],["assets under management","активы под управлением","The total value managed by a financial service."],["to keep up with innovation","успевать за инновациями","To develop at the same pace as new technology."],["to default on a loan","не выполнить обязательства по кредиту","To fail to make required loan payments."],["data privacy","конфиденциальность данных","Protection of personal information."],["to go digital","перейти в цифровой формат","To replace physical processes with digital ones."],["to add up","сложить","To calculate a total."],["to take out money","снять деньги","To withdraw money from an account."],["to keep up","продолжать в том же духе","To continue at the required pace."],["to set aside","отложить","To save money for a special purpose."],["to face misfortune","столкнуться с несчастьем","To experience serious bad luck."],["to be hesitant about","сомневаться насчёт","To feel uncertain about doing something."],["to have a say in","иметь право голоса","To have influence over a decision."],["for good or for bad","к добру или к худу","Whether the result is positive or negative."],["a go-to person","человек, к которому обращаются","A reliable person chosen first for help."],["to monitor meticulously","тщательно отслеживать","To observe something with great care."],["to retrieve lost earnings","вернуть потерянный доход","To recover income that was lost."],["to hit a dead-end","зайти в тупик","To reach a point where progress is impossible."]
+],
+6:[
+["yellow pages","справочник организаций","A printed directory of businesses and phone numbers."],["presentation hook","яркое начало презентации","An opening designed to capture attention."],["winning and gripping","выигрышный и захватывающий","Very attractive and able to hold attention."],["to pick up","набрать темп","To start working faster or more effectively."],["ubiquity","повсеместность","The state of being present everywhere."],["to make a cold call","сделать холодный звонок","To contact a potential customer unexpectedly."],["to total losses","подсчитать убытки","To calculate the complete amount lost."],["targeted ad","таргетированная реклама","An advertisement shown to a selected audience."],["display ad","медийная реклама","A visual advertisement shown on a website."],["lucrative deal","прибыльная сделка","An agreement that produces a large profit."],["novelty of ideas","новизна идей","The quality of ideas being new."],["downturn","экономический спад","A decline in business or economic activity."],["to enter recession","войти в рецессию","To begin a period of economic decline."],["to pull out of recession","выйти из рецессии","To recover from an economic decline."],["to reach the audience","охватить аудиторию","To communicate successfully with target people."],["to account for","составлять долю","To represent a particular amount or proportion."],["united we stand","вместе мы сильнее","Used to stress strength through cooperation."],["peak trends and shakeouts","пики трендов и вытеснение игроков","Market highs followed by removal of weaker participants."],["contrary to","вопреки","In opposition to something."],["political pundit","политический обозреватель","A person who publicly comments on politics."],["to wreak mayhem","сеять хаос","To cause serious disorder."],["to grasp sth","понять что-либо","To understand an idea."],["to dabble with sth","немного заниматься чем-либо","To try an activity without serious commitment."],["technology wiki","технологическая вики","A collaboratively edited source of technology information."],["a burning issue","животрепещущий вопрос","An urgent and important problem."],["to pay a heavy penalty","понести суровое наказание","To suffer a serious punishment."],["to bid for a contract","участвовать в конкурсе на контракт","To offer to do contracted work for a price."],["feasible","осуществимый","Practical and possible to achieve."],["feasibility","осуществимость","The degree to which a plan is practical."],["inevitable outcome","неизбежный результат","A result that cannot be avoided."],["one at a time","по одному","Individually rather than together."],["intrinsic part","неотъемлемая часть","An essential part of something."],["digital avatar","цифровой аватар","A digital representation of a person."],["digital native","цифровой абориген","A person who grew up with digital technology."],["to soar to new heights","взлететь до новых высот","To increase rapidly to a record level."],["decentralised data storage","децентрализованное хранение данных","Storage distributed across several locations."],["to carry a risk","нести риск","To involve a possible danger."],["to minimise a risk","минимизировать риск","To reduce a possible danger."],["available for consideration","доступный для рассмотрения","Ready to be examined or discussed."],["to lock out scammers","не допускать мошенников","To prevent fraudsters from accessing a system."],["customisable goods","настраиваемые товары","Products that users can adapt to their needs."],["to substitute sth for sth","заменить одно другим","To use one thing instead of another."],["to bring up an issue","поднять вопрос","To introduce a subject for discussion."],["to envision","представлять будущее","To imagine a future possibility."],["to tap a new horizon","открыть новые горизонты","To explore a new area of opportunity."],["to be on a search for","находиться в поиске","To be actively looking for something."],["to incorporate sth into sth","включить одно в другое","To make something part of a larger whole."],["tech geek","технический энтузиаст","A person highly interested in technology."],["to guide sb through sth","провести через процесс","To explain each step of a process."],["to be on the verge of","быть на пороге","To be very close to a new state or event."],["a gold mine of sth","кладезь чего-либо","A rich and valuable source."],["field worker","полевой работник","A person working outside a central office."],["advancement","прогресс","A development or improvement."],["renewable energy","возобновляемая энергия","Energy from sources that naturally renew."],["fossil fuel","ископаемое топливо","Coal, oil or gas formed from ancient material."],["the magnitude of sth","масштаб чего-либо","The great size or importance of something."],["court order eviction","выселение по решению суда","Removal from property under a court decision."],["to enable sb to do sth","позволить кому-либо сделать","To make an action possible."],["accounts ledger","бухгалтерская книга","A record of financial accounts."],["to enter in the ledger","внести в бухгалтерскую книгу","To record a transaction formally."],["to take over from sb","перенять обязанности","To replace someone in a role."],["to open up","открыть; создать возможность","To make something available or reveal differences."],["to undergo a transformation","претерпеть преобразование","To experience a major change."],["to reinvent oneself","переосмыслить себя","To develop a new identity or way of working."],["in the grip of change","во власти перемен","Strongly affected by ongoing change."],["to capture customers","привлечь клиентов","To gain customers' attention or business."],["to convert customers","превратить в покупателей","To cause potential customers to buy."],["to retain customers","удерживать клиентов","To keep customers over time."],["to vanish","исчезнуть","To disappear completely."],["unsolicited advice","непрошенный совет","Advice that was not requested."],["unsolicited takeover bid","непрошенное предложение о поглощении","An acquisition offer made without invitation."],["to fuel speculation","подогревать слухи","To make uncertain public discussion stronger."],["to fuel rumours","подогревать слухи","To cause rumours to spread."],["to fuel concerns","усиливать опасения","To make people more worried."],["to go on a search","отправиться на поиски","To begin actively looking for something."],["to soar above","взлететь выше","To rise far above a previous level."],["to gain an edge in the job market","получить преимущество на рынке труда","To become more competitive when seeking work."],["to put data on the blockchain","занести данные в блокчейн","To record information on a blockchain."],["to dabble in many things","пробовать многое","To try several activities without deep commitment."],["international judicial body","международный судебный орган","An institution dealing with international law."],["scientific advance","научное достижение","A new development in scientific knowledge."]
+],
+7:[
+["to rise to unprecedented heights","достичь беспрецедентных высот","To reach a level never achieved before."],["cheesy TV infomercial","безвкусный телемагазин","A low-quality television sales advertisement."],["to sell via a catalogue","продавать через каталог","To offer products through a printed catalogue."],["to purchase items from catalogues","покупать товары по каталогам","To order products listed in catalogues."],["average household","средняя семья","A household considered typical for a population."],["to shop from home","покупать из дома","To buy products without visiting a shop."],["online shopping","онлайн-покупки","Buying products through the internet."],["to become savvy","стать опытным","To gain practical knowledge and good judgement."],["rigorous analysis","тщательный анализ","A strict and thorough examination."],["liberal education","свободное гуманитарное образование","Broad education across several fields."],["to render sth obsolete","сделать что-либо устаревшим","To cause something to become outdated."],["to see sth as obsolete","считать что-либо устаревшим","To regard something as no longer useful."],["to shrink from ... to ...","сократиться с ... до ...","To become smaller between two stated levels."],["to plummet","резко упасть","To decrease suddenly and sharply."],["to flick through","быстро пролистать","To look quickly through pages."],["advertisement vs advertising","объявление и реклама как деятельность","A single advert compared with the activity of promotion."],["affordable goods","доступные товары","Products that people can reasonably pay for."],["available goods","имеющиеся товары","Products currently ready for purchase."],["to consume","потреблять","To use goods, services or resources."],["consumption","потребление","The act or amount of using goods and services."],["consumerism","общество потребления","A focus on buying and owning goods."],["to enter the era of sth","вступить в эпоху","To begin a new period defined by something."],["email marketing","маркетинг по электронной почте","Promotion sent to customers by email."],["brand recognition","узнаваемость бренда","The ability of consumers to identify a brand."],["brand loyalty","лояльность к бренду","A customer's repeated preference for a brand."],["evangelism marketing","маркетинг через сторонников бренда","Marketing driven by enthusiastic customers recommending a product."],["word-of-mouth marketing","маркетинг из уст в уста","Promotion spread through personal recommendations."],["a true conversation","настоящий диалог","Two-way communication rather than one-way messaging."],["in a matter of minutes","за считанные минуты","Within a very short time."],["not miss a beat","не допустить ни одной ошибки","To continue without hesitation or failure."],["omnichannel customer engagement","омниканальное взаимодействие с клиентами","Customer communication connected across all channels."],["to unleash omnichannel power","раскрыть потенциал омниканальности","To make full use of connected channels."],["to engage with brands","взаимодействовать с брендами","To communicate or interact actively with companies."],["to emerge as an alternative","стать альтернативой","To develop into another available option."],["to undergo a dramatic transformation","претерпеть значительные изменения","To change greatly."],["linear path","линейный путь","A sequence that develops in a straight order."],["nonlinear relationship","нелинейная связь","A relationship that does not change at a constant rate."],["at one's convenience","в удобное время","At a time suitable for a person."],["real-life example","пример из реальной жизни","An example taken from actual events."],["iconic brand","легендарный бренд","A brand widely recognised as representative of its field."],["rewards programme","программа поощрений","A scheme giving benefits for customer activity."],["to redeem reward points","обменять бонусные баллы","To use collected points to receive a benefit."],["stroke of luck","счастливый случай","A sudden piece of good fortune."],["in-store bakery","пекарня внутри магазина","A bakery operating inside a retail store."],["concession","торговая точка по договору","A business area operated inside another organisation."],["to obtain a concession","получить право на торговую точку","To gain permission to operate a concession."],["real-time product information","информация о товаре в реальном времени","Current product data provided immediately."],["to process on-the-spot sales","оформлять продажи на месте","To complete purchases immediately at a location."],["to place online orders","размещать онлайн-заказы","To submit purchase requests through the internet."],["to streamline brand messaging","упорядочить коммуникацию бренда","To make brand communication simpler and more consistent."],["seamless shopping experience","бесшовный покупательский опыт","A shopping process without breaks or obstacles."],["to drive sales","стимулировать продажи","To cause sales to increase."],["to crystallise company status","укрепить статус компании","To make a company's position clear and established."],["flagship store","флагманский магазин","A company's main and most prominent store."],["to pack with","наполнить чем-либо","To fill something with many items or people."],["to set off a borrowing boom","спровоцировать бум заимствований","To cause borrowing to increase rapidly."],["to be at the core of","быть в основе","To be central to something."],["in principle","в принципе","Generally, as an idea or rule."],["on principle","из принципа","Because of a firmly held belief."],["interaction between people","взаимодействие между людьми","Communication and action involving two or more people."],["emotional connection","эмоциональная связь","A strong feeling linking a customer to a brand."],["the first stop on a journey","первая точка пути","The first stage in a longer customer process."],["a journey that never ends","бесконечный путь","A continuing process without a final stage."],["to gear towards needs","ориентироваться на потребности","To design something for particular requirements."],["pain point","болевая точка клиента","A specific problem experienced by a customer."],["prospect","потенциальный покупатель","A person likely to become a customer."],["lead","лид","A person or organisation showing initial interest."],["easy-to-obtain data","легкодоступные данные","Information that can be collected without difficulty."],["firsthand feedback","отзыв из первых рук","Information received directly from the source."],["second-hand information","информация из вторых рук","Information received indirectly."],["human touch","человеческий подход","Personal attention provided by a real person."],["SAE criteria","конкретный, выгодный, развлекательный","Criteria meaning specific, advantageous and entertaining."],["to announce giveaways","объявлять розыгрыши","To publicly state that free items will be offered."],["coordinated community","согласованное сообщество","A community organised around connected activity."],["for good","навсегда","Permanently."],["top-tier live streamer","стример высшего уровня","A highly successful live broadcaster."],["to stream in","подключиться к трансляции","To join or send content through a live stream."],["to host a show","вести шоу","To present and manage a broadcast."],["the craze for sth","повальное увлечение","A period of extreme popularity."],["at the heart of the craze","в центре повального увлечения","At the central point of a popular trend."],["product rollout","запуск продукта","The introduction of a product to the market."],["to be the domain of sb","быть сферой кого-либо","To belong mainly to a particular group."],["avid gamer","заядлый игрок","A person very enthusiastic about video games."],["to overcome technical obstacles","преодолеть технические препятствия","To solve problems caused by technology."],["to get a huge boost","получить мощный импульс","To receive a large increase or advantage."],["to boost influence","усилить влияние","To increase the ability to affect people."],["to get bargains","выгодно купить","To buy products at unusually low prices."],["viewership","аудитория трансляции","The number of people watching a programme."],["to articulate simply","чётко и просто выразить","To explain an idea clearly in simple language."],["to take a commission","брать комиссию","To receive a percentage from a sale."],["to sell on commission","продавать за комиссию","To sell goods in exchange for a percentage."],["to create buzz","создать ажиотаж","To generate excited public attention."],["scarcity","дефицит","A situation in which there is not enough of something."],["scarce resources","ограниченные ресурсы","Resources available in insufficient amounts."],["to crave information","жаждать информации","To have a strong desire for information."],["to take over","захватить; стать доминирующим","To gain control or become dominant."],["to end up with","в итоге получить","To finally have a particular result."],["sth is king","что-либо важнее всего","Used to say something is the most influential factor."],["the other way around","наоборот","In the opposite order or direction."],["the odds are","скорее всего","Used to describe how likely something is."],["marketplace model","модель торговой площадки","A business model connecting many sellers and buyers."],["distinct advantage","явное преимущество","A clear benefit over alternatives."],["competitively priced","по конкурентной цене","Offered at a price comparable with rivals."],["to bring together vendors and customers","объединить продавцов и покупателей","To connect sellers with buyers."],["complete inventory","полный ассортимент","A full list or stock of goods."],["to convert site views into sales","превратить просмотры в продажи","To make website visitors complete purchases."],["to simulate the in-store experience","имитировать опыт магазина","To recreate physical shopping online."],["human-centric platform","человекоцентричная платформа","A service designed around people's needs."],["to add an item to a cart","добавить товар в корзину","To select a product for possible purchase."],["to meet pre-established criteria","соответствовать заданным критериям","To satisfy conditions decided in advance."],["to send an alert","отправить уведомление","To send a warning or notification."],["to lie ahead","предстоять впереди","To be expected in the future."],["a surge in e-commerce","всплеск электронной торговли","A sudden large increase in online sales."],["red ocean strategy","стратегия конкурентного рынка","Competing in an existing crowded market."],["blue ocean strategy","стратегия нового рынка","Creating new market space with little competition."],["single authentication service","единая служба аутентификации","One login system used across services."],["to undertake actions","предпринять действия","To begin and carry out planned actions."]
+]
+};
+Object.entries(extra).forEach(([id,items])=>{
+  const existing=new Set(units[id].words.map(x=>x.en.toLowerCase()));
+  items.forEach(([en,ru,def])=>{if(!existing.has(en.toLowerCase())){units[id].words.push(W(en,ru,def));existing.add(en.toLowerCase())}});
+});
+
+</script><script>
+const modes=[["cards","Карточки"],["quiz","Квиз"],["type","Перевод"],["match","Собери пару"],["odd","Лишнее слово"],["lightning","Молния"]],state={unit:"4",mode:"cards",i:0,known:new Set(JSON.parse(localStorage.getItem("ypk2-known")||"[]")),score:+localStorage.getItem("ypk2-score")||0,flip:false,left:null,right:null,prepResults:[],prepQueue:[],timer:null,time:30,gameScore:0};const $=id=>document.getElementById(id),U=()=>units[state.unit],word=()=>U().words[state.i%U().words.length],shuffle=a=>[...a].sort(()=>Math.random()-.5),esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])),norm=s=>s.toLowerCase().replace(/[’']/g,"'").replace(/[^a-zа-яё0-9 ]/gi," ").replace(/\s+/g," ").trim();
+function save(){localStorage.setItem("ypk2-known",JSON.stringify([...state.known]));localStorage.setItem("ypk2-score",state.score)}function learn(en){state.known.add(`${state.unit}:${en}`);state.score++;save();renderUnits();renderStats();renderList($("search").value)}function next(){state.i++;state.flip=false;renderPanel()}function setMode(m){clearInterval(state.timer);state.mode=m;state.i=0;state.prepResults=[];renderModes();renderPanel()}
+function renderUnits(){$("units").innerHTML=Object.entries(units).map(([id,u])=>{let k=u.words.filter(w=>state.known.has(`${id}:${w.en}`)).length,p=Math.round(k/u.words.length*100);return `<button class="unit ${id===state.unit?"active":""}" data-u="${id}"><span class="unit-top"><span>Unit ${id}</span><span>${p}%</span></span><small>${u.topic} · ${u.words.length} терминов</small><span class="bar"><i style="width:${p}%"></i></span></button>`}).join("");document.querySelectorAll("[data-u]").forEach(b=>b.onclick=()=>{state.unit=b.dataset.u;state.i=0;renderAll()})}function renderStats(){$("known").textContent=state.known.size;$("score").textContent=state.score}function renderModes(){$("modes").innerHTML=modes.map(([id,t])=>`<button class="mode ${["match","odd","lightning"].includes(id)?"game":""} ${state.mode===id?"active":""}" data-m="${id}">${t}</button>`).join("");document.querySelectorAll("[data-m]").forEach(b=>b.onclick=()=>setMode(b.dataset.m))}
+function renderList(q=""){let ws=U().words.filter(w=>(w.en+w.ru+w.def).toLowerCase().includes(q.toLowerCase()));$("lexTitle").textContent=`Словарь: ${U().words.length} терминов`;$("list").innerHTML=ws.map(w=>`<article class="word ${state.known.has(`${state.unit}:${w.en}`)?"known":""}"><b>${esc(w.en)}</b><em>${esc(w.ru)}</em><small>${esc(w.def)}</small></article>`).join("")}function fb(ok,w){return `<div class="feedback ${ok?"good":"bad"}">${ok?"Верно!":"Пока нет."} <b>${esc(w.en)}</b> — ${esc(w.ru)}<br><small>${esc(w.def)}</small></div>`}
+function cards(){let w=word();$("panel").innerHTML=`<div class="eyebrow">Карточка ${state.i%U().words.length+1} из ${U().words.length}</div><div class="prompt">${esc(w.en)}</div>${state.flip?`<p class="definition">${esc(w.def)}</p><span class="translation">${esc(w.ru)}</span>`:'<p class="definition">Сначала объясни термин своими словами на английском, затем открой ответ.</p>'}<div class="actions"><button class="primary" id="flip">${state.flip?"Скрыть ответ":"Показать объяснение и перевод"}</button>${state.flip?'<button class="secondary" id="yes">Знаю</button><button class="secondary danger" id="no">Повторить позже</button>':""}</div>`;$("flip").onclick=()=>{state.flip=!state.flip;cards()};if(state.flip){$("yes").onclick=()=>{learn(w.en);next()};$("no").onclick=next}}
+function quiz(){let w=word(),opts=shuffle([w,...shuffle(U().words.filter(x=>x!==w)).slice(0,3)]);$("panel").innerHTML=`<div class="eyebrow">Выбери русский перевод</div><div class="prompt">${esc(w.en)}</div><p class="definition">${esc(w.def)}</p><div class="choices">${opts.map(x=>`<button class="choice" data-a="${esc(x.en)}">${esc(x.ru)}</button>`).join("")}</div><div class="feedback" id="feedback">Английское объяснение помогает запомнить смысл, а не только пару слов.</div>`;document.querySelectorAll("[data-a]").forEach(b=>b.onclick=()=>{let ok=b.dataset.a===w.en;b.classList.add(ok?"correct":"wrong");$("feedback").outerHTML=fb(ok,w);if(ok){learn(w.en);setTimeout(next,650)}})}
+function type(){let w=word();$("panel").innerHTML=`<div class="eyebrow">Переведи на английский</div><div class="prompt">${esc(w.ru)}</div><p class="definition">Подсказка: ${esc(w.def)}</p><div class="inputrow"><input id="answer" autocomplete="off" placeholder="English term"><button class="primary" id="check">Проверить</button></div><div class="feedback" id="feedback">Можно не учитывать артикль и знаки препинания.</div><div class="actions"><button class="secondary" id="skip">Следующее</button></div>`;let check=()=>{let a=norm($("answer").value),e=norm(w.en.replace(/^to |^a |^an /,"")),ok=a===e||a===norm(w.en);$("feedback").outerHTML=fb(ok,w);if(ok)learn(w.en)};$("check").onclick=check;$("answer").onkeydown=e=>{if(e.key==="Enter")check()};$("skip").onclick=next;$("answer").focus()}
+function match(){let pairs=shuffle(U().words).slice(0,6),right=shuffle(pairs.map((w,i)=>({i,t:w.ru})));$("panel").innerHTML=`<div class="eyebrow">Мини-игра · Собери пару</div><p class="definition">Выбери термин слева и перевод справа.</p><div class="match"><div class="matchcol">${pairs.map((w,i)=>`<button data-l="${i}">${esc(w.en)}</button>`).join("")}</div><div class="matchcol">${right.map(x=>`<button data-r="${x.i}">${esc(x.t)}</button>`).join("")}</div></div><div class="feedback" id="feedback">Найди все 6 пар.</div><div class="actions"><button class="secondary" id="again">Новый набор</button></div>`;let test=()=>{if(state.left===null||state.right===null)return;let ok=state.left===state.right;if(ok){document.querySelector(`[data-l="${state.left}"]`).classList.add("done");document.querySelector(`[data-r="${state.right}"]`).classList.add("done");learn(pairs[state.left].en)}$("feedback").className=`feedback ${ok?"good":"bad"}`;$("feedback").textContent=ok?"Пара найдена!":"Эти элементы не совпадают.";state.left=state.right=null;document.querySelectorAll(".match button").forEach(x=>x.classList.remove("sel"))};document.querySelectorAll("[data-l]").forEach(b=>b.onclick=()=>{state.left=+b.dataset.l;document.querySelectorAll("[data-l]").forEach(x=>x.classList.remove("sel"));b.classList.add("sel");test()});document.querySelectorAll("[data-r]").forEach(b=>b.onclick=()=>{state.right=+b.dataset.r;document.querySelectorAll("[data-r]").forEach(x=>x.classList.remove("sel"));b.classList.add("sel");test()});$("again").onclick=match}
+function odd(){let other=Object.keys(units).filter(x=>x!==state.unit),oid=other[Math.floor(Math.random()*other.length)],odd=units[oid].words[Math.floor(Math.random()*units[oid].words.length)],opts=shuffle([...shuffle(U().words).slice(0,3),odd]);$("panel").innerHTML=`<div class="eyebrow">Мини-игра · Лишнее слово</div><div class="prompt">Какой термин не относится к теме Unit ${state.unit}?</div><div class="choices">${opts.map(x=>`<button class="choice" data-odd="${esc(x.en)}">${esc(x.en)}<small style="display:block;color:#667085">${esc(x.def)}</small></button>`).join("")}</div><div class="feedback" id="feedback">Сравни смысл терминов, а не их написание.</div>`;document.querySelectorAll("[data-odd]").forEach(b=>b.onclick=()=>{let ok=b.dataset.odd===odd.en;b.classList.add(ok?"correct":"wrong");$("feedback").className=`feedback ${ok?"good":"bad"}`;$("feedback").innerHTML=ok?`Верно: <b>${esc(odd.en)}</b> относится к другому юниту.`:`Это слово относится к Unit ${state.unit}.`;if(ok){state.score++;save();renderStats();setTimeout(next,750)}})}
+function lightning(start=false){if(start){state.time=30;state.gameScore=0;clearInterval(state.timer);state.timer=setInterval(()=>{state.time--;if($("timebar"))$("timebar").style.width=`${state.time/30*100}%`;if($("time"))$("time").textContent=state.time;if(state.time<=0){clearInterval(state.timer);$("panel").innerHTML=`<div class="eyebrow">Раунд завершён</div><div class="game-score">${state.gameScore}</div><p class="definition">правильных ответов за 30 секунд</p><button class="primary" id="restart">Ещё раунд</button>`;$("restart").onclick=()=>lightning(true)}},1000)}let w=word(),opts=shuffle([w,...shuffle(U().words.filter(x=>x!==w)).slice(0,2)]);$("panel").innerHTML=`<div class="eyebrow">Мини-игра · Молния · <span id="time">${state.time}</span> сек</div><div class="timer"><i id="timebar" style="width:${state.time/30*100}%"></i></div><div class="game-score">${state.gameScore}</div><div class="prompt">${esc(w.ru)}</div><div class="choices">${opts.map(x=>`<button class="choice" data-fast="${esc(x.en)}">${esc(x.en)}</button>`).join("")}</div>`;document.querySelectorAll("[data-fast]").forEach(b=>b.onclick=()=>{if(b.dataset.fast===w.en){state.gameScore++;learn(w.en)}state.i++;lightning(false)})}
+function prep(start=false){clearInterval(state.timer);state.mode="prep";renderModes();if(start||!state.prepQueue.length){state.prepQueue=shuffle(U().preps).slice(0,10);state.i=0;state.prepResults=[]}let pair=state.prepQueue[state.i];if(!pair){let ok=state.prepResults.filter(Boolean).length;$("panel").innerHTML=`<div class="eyebrow">Серия завершена</div><div class="game-score">${ok}/10</div><p class="definition">Ошибочные сочетания будут повторены в следующей серии.</p><button class="primary" id="prepAgain">Новая серия</button>`;$("prepAgain").onclick=()=>prep(true);return}let [q,a]=pair,pool=["to","in","on","with","for","at","from","into","about","between","under","by","of","among","within"],opts=shuffle([a,...shuffle(pool.filter(x=>x!==a)).slice(0,3)]);$("panel").innerHTML=`<div class="eyebrow">Учить предлоги · ${state.i+1} из 10</div><div class="prep-progress">${Array.from({length:10},(_,i)=>`<i class="${state.prepResults[i]===true?"ok":state.prepResults[i]===false?"bad":""}"></i>`).join("")}</div><div class="prompt">${esc(q)}</div><div class="choices">${opts.map(x=>`<button class="choice" data-prep="${x}">${x}</button>`).join("")}</div><div class="feedback" id="feedback">Выбери предлог. После ошибки сочетание будет показано целиком.</div>`;document.querySelectorAll("[data-prep]").forEach(b=>b.onclick=()=>{let ok=b.dataset.prep===a;b.classList.add(ok?"correct":"wrong");state.prepResults[state.i]=ok;$("feedback").className=`feedback ${ok?"good":"bad"}`;$("feedback").innerHTML=ok?`Верно: <b>${esc(q.replace("___",a))}</b>`:`Правильно: <b>${esc(q.replace("___",a))}</b>. Проговори сочетание целиком.`;if(ok)state.score++;else state.prepQueue.push(pair);save();renderStats();setTimeout(()=>{state.i++;prep(false)},1050)})}
+function renderPanel(){clearInterval(state.timer);({cards,quiz,type,match,odd,lightning:()=>lightning(true),prep:()=>prep(false)})[state.mode]()}function renderAll(){$("title").textContent=`Unit ${state.unit}: ${U().topic}`;$("desc").textContent=U().desc;renderUnits();renderStats();renderModes();renderList();renderPanel()}$("search").oninput=e=>renderList(e.target.value);$("prepHero").onclick=()=>prep(true);$("reset").onclick=()=>{state.known=new Set;state.score=0;save();renderAll()};renderAll();
+</script><script>
+/* Quizlet-inspired study controls: previous step, answer reveal, audio, stars and a mixed test. */
+const ypkOriginalRenderPanel=renderPanel;
+const ypkOriginalRenderList=renderList;
+state.starred=new Set(JSON.parse(localStorage.getItem("ypk2-starred")||"[]"));
+state.testItems=[];
+state.testAnswers=[];
+
+const ypkPrepRu={
+"controversy ___ the value":"спор о ценности","___ the bounds of the law":"в пределах закона","bear up ___ careful scrutiny":"выдержать тщательную проверку","to be ___ large":"находиться на свободе","a mindset ___ officials":"образ мышления среди чиновников","a trade-off ___ human rights and security":"компромисс между правами человека и безопасностью","a query ___ the role":"вопрос о роли","restitution ___ the bank":"возмещение банку","scramble ___ analysis":"стремиться как можно скорее получить анализ","insight ___ priorities":"понимание приоритетов","reimburse him ___ gas":"возместить ему расходы на бензин","convert ___ new customers":"превратить в новых клиентов","align ___ the framework":"соответствовать установленным рамкам","compensation ___ loss of revenue":"компенсация за потерю дохода",
+"be subject ___ regulation":"подлежать регулированию","___ the wake of the crisis":"после кризиса","shake the market ___ its core":"потрясти рынок до основания","interest ___ debts":"проценты по долгам","implications ___ consumers":"последствия для потребителей","attune ___ new risks":"приспособиться к новым рискам","pertain ___ finance":"относиться к финансам","resort ___ borrowing":"прибегнуть к заимствованию","turn a profit ___ the deal":"получить прибыль от сделки","trade ___ goods":"обменивать на товары","struggle ___ high debt loads":"бороться с высокой долговой нагрузкой","enrol ___ a university":"поступить в университет","take care ___ personal finances":"заниматься личными финансами","a hedge ___ volatility":"защита от волатильности","cater ___ customers' needs":"удовлетворять потребности клиентов",
+"subscribe ___ a channel":"подписаться на канал","be inundated ___ messages":"быть заваленным сообщениями","piggyback ___ a trend":"воспользоваться существующим трендом","account ___ 60% of the workforce":"составлять 60% рабочей силы","come up ___ the right words":"подобрать правильные слова","factor ___ inflation":"учесть инфляцию","factor ___ unusual effects":"исключить необычные эффекты из расчёта","tangle ___ competitors":"вступить в противостояние с конкурентами","bid ___ a contract":"участвовать в конкурсе на контракт","contrary ___ expectations":"вопреки ожиданиям","constrained ___ limited capacity":"ограниченный недостаточными мощностями","slide ___ recession":"скатиться в рецессию","information ___ the internet":"информация в интернете","available ___ consideration":"доступный для рассмотрения","return ___ investment":"доходность инвестиций","subscribe ___ notifications":"подписаться на уведомления",
+"___ response to complaints":"в ответ на жалобы","available ___ your fingertips":"доступный под рукой","sell ___ a catalogue":"продавать через каталог","purchase items ___ catalogues":"покупать товары по каталогам","expand ___ product lines":"расширяться в новые категории товаров","shop ___ home":"делать покупки из дома","attention ___ detail":"внимание к деталям","align ___ one's values":"соответствовать чьим-либо ценностям","resonate ___ customers":"находить отклик у клиентов","shrink ___ 20%":"сократиться на 20%","capitalise ___ knowledge":"извлечь выгоду из знаний","draw ___ savings":"использовать сбережения","lay the foundations ___ growth":"заложить основы роста","interaction ___ customers":"взаимодействие с клиентами","connection ___ a customer":"связь с клиентом","be ___ the core of the brand":"быть в основе бренда","earn commission ___ sales":"получать комиссию с продаж"
+};
+
+const ypkQuizMode=modes.find(x=>x[0]==="quiz");
+if(ypkQuizMode)ypkQuizMode[1]="Учить";
+if(!modes.some(x=>x[0]==="test"))modes.splice(3,0,["test","Тест"]);
+
+function ypkFindWord(en){for(const u of Object.values(units)){const found=u.words.find(w=>w.en===en);if(found)return found}return null}
+function ypkWrittenAnswerMatches(answer,term){
+  const clean=value=>norm(String(value??"").normalize("NFKC"));
+  const entered=clean(answer),expected=clean(term);
+  return entered!==""&&(entered===expected||entered===expected.replace(/^(to|a|an)\s+/,""));
+}
+function ypkCurrentWord(){if(state.mode==="prep"&&state.prepQueue[state.i]){const p=state.prepQueue[state.i];return {en:p[0].replace("___",p[1]),ru:ypkPrepRu[p[0]]||p[2]||""}}return state.mode==="test"&&state.testItems[state.i]?.word?state.testItems[state.i].word:word()}
+function ypkSaveStars(){localStorage.setItem("ypk2-starred",JSON.stringify([...state.starred]))}
+function ypkSpeak(){const w=ypkCurrentWord();if(!w||!window.speechSynthesis)return;window.speechSynthesis.cancel();const utterance=new SpeechSynthesisUtterance(w.en);utterance.lang="en-US";utterance.rate=.85;window.speechSynthesis.speak(utterance)}
+function ypkToggleStar(){const w=ypkCurrentWord(),key=`${state.unit}:${w.en}`;state.starred.has(key)?state.starred.delete(key):state.starred.add(key);ypkSaveStars();const button=$("starWord");if(button){button.classList.toggle("starred",state.starred.has(key));button.textContent=state.starred.has(key)?"★ В избранном":"☆ В избранное"}renderList($("search").value)}
+function ypkPrevious(){clearInterval(state.timer);if(state.i>0){state.i--;state.flip=false;if(state.mode==="test")ypkRenderTest();else if(state.mode==="prep")prep(false);else renderPanel()}else{const note=$("toolNote");if(note)note.textContent="Это первое задание в режиме"}}
+function ypkReveal(){let html="";
+  if(state.mode==="prep"){const pair=state.prepQueue[state.i];html=pair?`<b>Правильный предлог: ${esc(pair[1])}</b><span>${esc(pair[0].replace("___",pair[1]))}</span><small><strong>Перевод:</strong> ${esc(ypkPrepRu[pair[0]]||pair[2]||"")}</small>`:"<b>Серия завершена</b>"}
+  else if(state.mode==="match"){html="<b>Подсказка</b><span>Переводы уже находятся в правой колонке. Сначала найди знакомые пары, затем исключай оставшиеся.</span>"}
+  else if(state.mode==="odd"){const found=[...document.querySelectorAll("[data-odd]")].map(b=>ypkFindWord(b.dataset.odd)).filter(Boolean);html=`<b>Переводы вариантов</b>${found.map(w=>`<span>${esc(w.en)} — ${esc(w.ru)}</span>`).join("")}`}
+  else{const w=ypkCurrentWord();html=`<b>${esc(w.en)}</b><span>${esc(w.ru)}</span><small>${esc(w.def)}</small>`}
+  let box=$("revealBox");if(!box){box=document.createElement("div");box.id="revealBox";box.className="reveal-box";const tools=document.querySelector(".study-tools");tools?tools.before(box):$("panel").append(box)}box.innerHTML=html;
+  const button=$("revealTranslation");if(button)button.textContent="Перевод показан";
+}
+function ypkEnsureTools(){const panel=$("panel");if(!panel||panel.querySelector(".study-tools"))return;const w=ypkCurrentWord(),key=`${state.unit}:${w.en}`,bar=document.createElement("div");bar.className="study-tools";bar.innerHTML=`<button class="study-tool" id="stepBack" ${state.i===0?"disabled":""}>← Назад</button><button class="study-tool" id="revealTranslation">Показать перевод</button><button class="study-tool" id="speakWord">🔊 Слушать</button><button class="study-tool ${state.starred.has(key)?"starred":""}" id="starWord">${state.starred.has(key)?"★ В избранном":"☆ В избранное"}</button><span class="tool-note" id="toolNote">←/→ — навигация · пробел — перевод</span>`;panel.append(bar);$("stepBack").onclick=ypkPrevious;$("revealTranslation").onclick=ypkReveal;$("speakWord").onclick=ypkSpeak;$("starWord").onclick=ypkToggleStar}
+
+function ypkBuildTest(){state.testItems=shuffle(U().words).slice(0,10).map((w,i)=>({word:w,type:["choice","written","truefalse"][i%3],claim:i%2?w.ru:shuffle(U().words.filter(x=>x!==w))[0].ru}));state.testAnswers=[];state.i=0}
+function ypkAnswerTest(value){const item=state.testItems[state.i];if(!item||state.testAnswers[state.i])return;let ok=false,label=value;if(item.type==="choice")ok=value===item.word.en;if(item.type==="written")ok=ypkWrittenAnswerMatches(value,item.word.en);if(item.type==="truefalse")ok=(value==="true")===(item.claim===item.word.ru);state.testAnswers[state.i]={ok,label};if(ok)learn(item.word.en);ypkRenderTest()}
+function ypkRenderTest(){if(!state.testItems.length)ypkBuildTest();if(state.i>=state.testItems.length){const score=state.testAnswers.filter(x=>x&&x.ok).length;$("panel").innerHTML=`<div class="eyebrow">Тест завершён</div><div class="game-score">${score}/10</div><p class="definition">${score>=8?"Отличный результат. Повтори ошибки и попробуй ещё раз.":"Открой ошибки ниже и повтори определения."}</p><div class="test-review">${state.testItems.map((x,i)=>`<div class="test-row ${state.testAnswers[i]?.ok?"ok":"bad"}"><b>${i+1}. ${esc(x.word.en)} — ${esc(x.word.ru)}</b><br><small>${esc(x.word.def)}</small></div>`).join("")}</div><div class="actions"><button class="primary" id="testAgain">Новый тест</button></div>`;$("testAgain").onclick=()=>{ypkBuildTest();ypkRenderTest()};ypkEnsureTools();return}
+  const item=state.testItems[state.i],answered=state.testAnswers[state.i];let task="";
+  if(item.type==="choice"){const opts=shuffle([item.word,...shuffle(U().words.filter(x=>x!==item.word)).slice(0,3)]);task=`<div class="prompt">${esc(item.word.ru)}</div><div class="choices">${opts.map(x=>`<button class="choice" data-test="${esc(x.en)}" ${answered?"disabled":""}>${esc(x.en)}</button>`).join("")}</div>`}
+  if(item.type==="written")task=`<div class="prompt">${esc(item.word.ru)}</div><p class="definition">Напиши термин по-английски.</p><div class="inputrow"><input id="testInput" autocomplete="off" ${answered?"disabled":""}><button class="primary" id="testCheck" ${answered?"disabled":""}>Проверить</button></div>`;
+  if(item.type==="truefalse")task=`<div class="prompt">${esc(item.word.en)} — ${esc(item.claim)}</div><p class="definition">Этот перевод верный?</p><div class="choices"><button class="choice" data-test-bool="true" ${answered?"disabled":""}>Верно</button><button class="choice" data-test-bool="false" ${answered?"disabled":""}>Неверно</button></div>`;
+  $("panel").innerHTML=`<div class="eyebrow">Тест · вопрос ${state.i+1} из ${state.testItems.length}</div><div class="test-progress"><i style="width:${(state.i+1)/state.testItems.length*100}%"></i></div>${task}${answered?fb(answered.ok,item.word):'<div class="feedback">Ответь на вопрос. Перевод можно открыть кнопкой ниже.</div>'}${answered?'<div class="actions"><button class="primary" id="testNext">Следующий вопрос</button></div>':""}`;
+  document.querySelectorAll("[data-test]").forEach(b=>b.onclick=()=>ypkAnswerTest(b.dataset.test));document.querySelectorAll("[data-test-bool]").forEach(b=>b.onclick=()=>ypkAnswerTest(b.dataset.testBool));if($("testCheck")){const check=()=>ypkAnswerTest($("testInput").value);$("testCheck").onclick=check;$("testInput").onkeydown=e=>{if(e.key==="Enter")check()}}if($("testNext"))$("testNext").onclick=()=>{state.i++;ypkRenderTest()};ypkEnsureTools()
+}
+
+renderPanel=function(){if(state.mode==="test")ypkRenderTest();else ypkOriginalRenderPanel();setTimeout(ypkEnsureTools,0)};
+const ypkOriginalType=type;
+type=function(){
+  ypkOriginalType();
+  const current=word(),answer=$("answer"),checkButton=$("check");
+  let credited=false;
+  $("feedback").textContent="Регистр букв, артикль и знаки препинания не влияют на проверку.";
+  const check=()=>{
+    const ok=ypkWrittenAnswerMatches(answer.value,current.en);
+    const feedback=$("panel").querySelector(".feedback");
+    if(feedback)feedback.outerHTML=fb(ok,current);
+    if(ok&&!credited){credited=true;learn(current.en)}
+  };
+  checkButton.onclick=check;
+  answer.onkeydown=e=>{if(e.key==="Enter")check()};
+};
+renderList=function(q=""){ypkOriginalRenderList(q);document.querySelectorAll("#list .word").forEach(card=>{const en=card.querySelector("b")?.textContent;if(!en)return;const key=`${state.unit}:${en}`,button=document.createElement("button");button.className="word-star";button.title="Добавить в избранное";button.textContent=state.starred.has(key)?"★":"☆";button.onclick=()=>{state.starred.has(key)?state.starred.delete(key):state.starred.add(key);ypkSaveStars();renderList($("search").value)};card.append(button)})};
+const ypkObserver=new MutationObserver(()=>setTimeout(ypkEnsureTools,0));ypkObserver.observe($("panel"),{childList:true});
+document.addEventListener("keydown",e=>{if(["INPUT","TEXTAREA"].includes(document.activeElement.tagName))return;if(e.key==="ArrowLeft"){e.preventDefault();ypkPrevious()}if(e.key==="ArrowRight"&&state.mode!=="match"){e.preventDefault();next()}if(e.code==="Space"){e.preventDefault();ypkReveal()}if(e.key.toLowerCase()==="s")ypkToggleStar()});
+renderModes();renderList();renderPanel();
+
+</script><script>
+// Add preposition practice from the complete unit glossary, keeping the original exercises.
+const ypkPrepPattern=/(^|\s)(about|above|across|after|against|among|around|at|before|behind|below|between|beyond|by|during|for|from|in|into|of|on|onto|over|through|to|toward|towards|under|upon|via|with|within|without)(?=\s|$)/gi;
+for(const unit of Object.values(units)){
+  const seen=new Set(unit.preps.map(pair=>pair[0].toLowerCase()));
+  for(const w of unit.words){
+    ypkPrepPattern.lastIndex=0;
+    for(const match of w.en.matchAll(ypkPrepPattern)){
+      const prep=match[2].toLowerCase(),start=match.index+match[1].length;
+      if(prep==="to"&&start===0)continue; // Infinitive marker is not the missing preposition.
+      const masked=w.en.slice(0,start)+"___"+w.en.slice(start+match[2].length);
+      if(!seen.has(masked.toLowerCase())){unit.preps.push([masked,prep,w.ru]);seen.add(masked.toLowerCase())}
+      break; // One clear answer per glossary term.
+    }
+  }
+}
+
+function ypkPrepHeroCount(){const caption=$("prepHero")?.querySelector("span");if(caption)caption.textContent=`Заданий: ${U().preps.length} · все сочетания и повтор ошибок`}
+const ypkBaseRenderAll=renderAll;
+state.prepUnit=state.unit;
+renderAll=function(){if(state.prepUnit!==state.unit){state.prepQueue=[];state.prepUnit=state.unit}ypkBaseRenderAll();ypkPrepHeroCount()};
+ypkPrepHeroCount();
+
+prep=function(start=false){
+  clearInterval(state.timer);
+  state.mode="prep";
+  renderModes();
+  if(start||!state.prepQueue.length){
+    state.prepQueue=state.randomOrder?shuffle(U().preps):[...U().preps];
+    state.prepOriginalCount=state.prepQueue.length;
+    state.prepResults=[];
+    state.prepMastered=new Set();
+    state.prepMistakes=new Map();
+    state.i=0;
+  }
+  const pair=state.prepQueue[state.i],total=state.prepOriginalCount;
+  if(!pair){
+    const firstTry=state.prepResults.slice(0,total).filter(Boolean).length;
+    const mistakes=[...(state.prepMistakes||new Map()).values()];
+    $("panel").innerHTML=`<div class="eyebrow">Все сочетания пройдены</div><div class="game-score">${firstTry}/${total}</div><p class="definition">Верно с первой попытки. Ошибочные сочетания повторялись до правильного ответа.</p>${mistakes.length?`<div class="test-review"><b>Сочетания, в которых были ошибки</b>${mistakes.map(([q,a,ru])=>`<div class="test-row bad"><b>${esc(q.replace("___",a))} — ${esc(ypkPrepRu[q]||ru||"")}</b></div>`).join("")}</div>`:'<div class="feedback good">Ошибок не было!</div>'}<button class="primary" id="prepAgain">Пройти заново</button>`;
+    $("prepAgain").onclick=()=>prep(true);
+    ypkEnsureTools();
+    return;
+  }
+  const [q,a]=pair,answered=state.prepResults[state.i]!==undefined;
+  const pool=["to","in","on","with","for","at","from","into","about","between","under","by","of","among","within","against","over","through","via","after","before","behind","without"];
+  const opts=shuffle([a,...shuffle(pool.filter(x=>x!==a)).slice(0,3)]);
+  const fraction=Math.min(100,Math.round(state.i/Math.max(total,1)*100));
+  $("panel").innerHTML=`<div class="eyebrow">Учить предлоги · ${state.i+1} из ${state.prepQueue.length}</div><div class="test-progress"><i style="width:${fraction}%"></i></div><div class="prompt">${esc(q)}</div>${answered?`<div class="feedback ${state.prepResults[state.i]?"good":"bad"}">${state.prepResults[state.i]?"Верно!":"Правильный ответ:"} <b>${esc(q.replace("___",a))}</b><br><small>${esc(ypkPrepRu[q]||pair[2]||"")}</small></div><div class="actions"><button class="primary" id="prepNext">Следующее сочетание</button></div>`:`<div class="choices">${opts.map(x=>`<button class="choice" data-prep="${esc(x)}">${esc(x)}</button>`).join("")}</div><div class="feedback">Выбери предлог. Кнопка «Показать перевод» откроет ответ и русский смысл.</div>`}`;
+  if(answered){$("prepNext").onclick=()=>{state.i++;prep(false)}}
+  else document.querySelectorAll("[data-prep]").forEach(b=>b.onclick=()=>{
+    const ok=b.dataset.prep===a;
+    state.prepResults[state.i]=ok;
+    if(ok){state.score++;state.prepMastered.add(q)}
+    else{state.prepQueue.push(pair);state.prepMistakes.set(q,pair)}
+    save();renderStats();prep(false);
+  });
+  ypkEnsureTools();
+};
+
+</script><script>
+// Original context sentences based on the vocabulary in Units 4–7.
+const ypkSentenceBank={
+  "4":[
+    ["The investigators accused the executive ___ fraud after reviewing the company's accounts.",["of"],"Следователи обвинили руководителя в мошенничестве после проверки счетов компании.","accuse somebody of something"],
+    ["The authorities charged two managers ___ serious misconduct.",["with"],"Власти предъявили двум руководителям обвинения в серьёзных нарушениях.","charge somebody with something"],
+    ["The advertising campaign sparked a controversy ___ the brand's ethical claims.",["about"],"Рекламная кампания вызвала спор об этических заявлениях бренда.","a controversy about something"],
+    ["Residents sought compensation ___ the damage caused by the industrial accident.",["for"],"Жители добивались компенсации за ущерб от аварии на производстве.","compensation for damage"],
+    ["Auditors looked ___ the falsified records before publishing their report.",["into"],"Аудиторы изучили подделанные документы перед публикацией отчёта.","look into means investigate"],
+    ["The company was fined ___ repeated labour abuse.",["for"],"Компанию оштрафовали за неоднократную эксплуатацию работников.","be fined for an offence"],
+    ["Environmental groups took a public stance ___ the new factory project.",["against"],"Экологические организации публично выступили против проекта нового завода.","take a stance against something"],
+    ["The CEO thought he could get away ___ tax evasion.",["with"],"Генеральный директор думал, что сможет избежать наказания за уклонение от налогов.","get away with something"],
+    ["Evidence of greenwashing finally came ___ light during the investigation.",["to"],"Доказательства гринвошинга наконец стали известны во время расследования.","come to light"],
+    ["The new policy aligns ___ the company's sustainability goals.",["with"],"Новая политика соответствует целям компании в области устойчивого развития.","align with something"],
+    ["The manufacturer invested ___ recycled materials to reduce waste.",["in"],"Производитель вложился в переработанные материалы, чтобы сократить отходы.","invest in something"],
+    ["The judge sentenced the fraudster ___ five years in prison.",["to"],"Судья приговорил мошенника к пяти годам тюрьмы.","sentence somebody to a prison term"],
+    ["Investigators traced the illegal payments back ___ a former supplier.",["to"],"Следователи проследили происхождение незаконных платежей до бывшего поставщика.","trace something back to its origin"],
+    ["The report focused ___ the company's environmental record.",["on"],"Отчёт был посвящён экологической репутации компании.","focus on something"],
+    ["The board faced a trade-off ___ higher profits and fair wages.",["between"],"Совет директоров столкнулся с выбором между большей прибылью и справедливой оплатой труда.","a trade-off between two things"],
+    ["The scandal led ___ tighter regulations across the industry.",["to"],"Скандал привёл к ужесточению правил во всей отрасли.","lead to a result"],
+    ["The firm reimbursed local families ___ their additional expenses.",["for"],"Компания возместила местным семьям дополнительные расходы.","reimburse somebody for something"],
+    ["___ the end, the company apologised ___ its reckless behaviour.",["in","for"],"В конце концов компания извинилась за своё безрассудное поведение.","in the end; apologise for something"]
+  ],
+  "5":[
+    ["Many customers lost confidence ___ the bank after the crisis.",["in"],"После кризиса многие клиенты потеряли доверие к банку.","confidence in somebody or something"],
+    ["The interest ___ her debts increased every month.",["on"],"Проценты по её долгам росли каждый месяц.","interest on debts"],
+    ["Gold can provide a hedge ___ market volatility.",["against"],"Золото может служить защитой от нестабильности рынка.","a hedge against something"],
+    ["Several small businesses slid ___ recession as demand fell.",["into"],"Несколько малых предприятий столкнулись со спадом, когда спрос снизился.","slide into recession"],
+    ["In the past, some banknotes could be redeemed ___ gold.",["for"],"В прошлом некоторые банкноты можно было обменять на золото.","be redeemable for something"],
+    ["The investors turned a profit ___ the property deal.",["on"],"Инвесторы получили прибыль от сделки с недвижимостью.","turn a profit on a deal"],
+    ["The regulator focused ___ the risks of excessive borrowing.",["on"],"Регулятор сосредоточился на рисках чрезмерного заимствования.","focus on something"],
+    ["Managers must account ___ their financial decisions.",["for"],"Руководители должны отвечать за свои финансовые решения.","account for one's actions"],
+    ["The company resorted ___ borrowing to cover its costs.",["to"],"Компания прибегла к заимствованию, чтобы покрыть расходы.","resort to something"],
+    ["She built a diversified portfolio ___ assets.",["of"],"Она сформировала диверсифицированный портфель активов.","a portfolio of assets"],
+    ["The bank invested ___ staff training and better technology.",["in"],"Банк вложился в обучение сотрудников и более совершенные технологии.","invest in something"],
+    ["The startup struggled ___ a high debt load.",["with"],"Стартапу было трудно справиться с высокой долговой нагрузкой.","struggle with something"],
+    ["Analysts warned of the risk ___ inflation.",["of"],"Аналитики предупредили о риске инфляции.","the risk of something"],
+    ["This service caters ___ customers with limited savings.",["to"],"Эта услуга рассчитана на клиентов с небольшими сбережениями.","cater to customers"],
+    ["The new payment system is subject ___ strict regulation.",["to"],"Новая платёжная система подлежит строгому регулированию.","be subject to regulation"],
+    ["___ the wake ___ the crisis, lenders became more cautious.",["in","of"],"После кризиса кредиторы стали осторожнее.","in the wake of something"],
+    ["The value of the fund rose ___ ten percent ___ one year.",["by","in"],"Стоимость фонда выросла на десять процентов за один год.","rise by an amount; in a period"],
+    ["The report points ___ a decline ___ consumer spending.",["to","in"],"Отчёт указывает на снижение потребительских расходов.","point to a trend; a decline in something"]
+  ],
+  "6":[
+    ["Thousands of users subscribed ___ the company's technology channel.",["to"],"Тысячи пользователей подписались на технологический канал компании.","subscribe to a channel"],
+    ["The support team was inundated ___ messages after the launch.",["with"],"После запуска службу поддержки завалили сообщениями.","be inundated with something"],
+    ["The brand piggybacked ___ a popular online trend.",["on"],"Бренд воспользовался популярным трендом в интернете.","piggyback on a trend"],
+    ["Digital services now account ___ most of the firm's revenue.",["for"],"Цифровые услуги теперь составляют большую часть выручки фирмы.","account for a share"],
+    ["The designers came up ___ a simpler interface.",["with"],"Дизайнеры придумали более простой интерфейс.","come up with an idea"],
+    ["The forecast must factor ___ expected inflation.",["in"],"Прогноз должен учитывать ожидаемую инфляцию.","factor in a variable"],
+    ["The analysts factored ___ the unusual one-time costs.",["out"],"Аналитики исключили необычные разовые расходы из расчёта.","factor out an effect"],
+    ["The platform locked scammers ___ of the new system.",["out"],"Платформа не допустила мошенников в новую систему.","lock somebody out of a system"],
+    ["The software firm bid ___ a government contract.",["for"],"Компания-разработчик подала заявку на государственный контракт.","bid for a contract"],
+    ["The dashboard displays customer data ___ real time.",["in"],"Панель показывает данные клиентов в реальном времени.","in real time"],
+    ["Smart devices connect ___ the internet automatically.",["to"],"Умные устройства автоматически подключаются к интернету.","connect to the internet"],
+    ["The project delivered a strong return ___ investment.",["on"],"Проект обеспечил высокую отдачу от инвестиций.","return on investment"],
+    ["Contrary ___ expectations, the new app became popular quickly.",["to"],"Вопреки ожиданиям новое приложение быстро стало популярным.","contrary to expectations"],
+    ["The rollout was constrained ___ limited server capacity.",["by"],"Внедрение сдерживали ограниченные мощности серверов.","be constrained by something"],
+    ["The sector slid ___ recession after several years of growth.",["into"],"После нескольких лет роста сектор вошёл в спад.","slide into recession"],
+    ["The proposal is available ___ consideration by the board.",["for"],"Предложение доступно для рассмотрения советом директоров.","available for consideration"],
+    ["The economy pulled ___ ___ recession faster than expected.",["out","of"],"Экономика вышла из рецессии быстрее, чем ожидалось.","pull out of recession"],
+    ["The team substituted the old program ___ a cloud-based service.",["with"],"Команда заменила старую программу облачным сервисом.","substitute something with something else"]
+  ],
+  "7":[
+    ["Many customers prefer to shop ___ home using their phones.",["from"],"Многие покупатели предпочитают делать покупки из дома с телефона.","shop from home"],
+    ["The number of complaints shrank ___ twenty percent this month.",["by"],"В этом месяце число жалоб сократилось на двадцать процентов.","shrink by an amount"],
+    ["Customer trust is ___ the core of the brand's strategy.",["at"],"Доверие клиентов лежит в основе стратегии бренда.","at the core of something"],
+    ["The campaign should align ___ the company's values.",["with"],"Кампания должна соответствовать ценностям компании.","align with values"],
+    ["The message resonated ___ younger customers.",["with"],"Это сообщение нашло отклик у молодых покупателей.","resonate with somebody"],
+    ["Her attention ___ detail improved the customer experience.",["to"],"Её внимание к деталям улучшило клиентский опыт.","attention to detail"],
+    ["A clear product page can convert visitors ___ buyers.",["into"],"Понятная страница товара может превращать посетителей в покупателей.","convert one group into another"],
+    ["Every interaction ___ customers should feel personal.",["with"],"Каждое взаимодействие с клиентами должно ощущаться личным.","interaction with customers"],
+    ["A strong connection ___ a customer helps build loyalty.",["to"],"Прочная связь с клиентом помогает формировать лояльность.","a connection to somebody"],
+    ["The affiliate earns a commission ___ every sale.",["on"],"Партнёр получает комиссию с каждой продажи.","earn commission on sales"],
+    ["Better service can lay the foundations ___ long-term growth.",["for"],"Более качественный сервис может заложить основу долгосрочного роста.","lay the foundations for something"],
+    ["___ response ___ complaints, the retailer changed its return policy.",["in","to"],"В ответ на жалобы магазин изменил правила возврата.","in response to something"],
+    ["The company expanded ___ several new product lines.",["into"],"Компания вышла в несколько новых товарных категорий.","expand into a new area"],
+    ["The retailer sells its products ___ an online catalogue.",["via"],"Магазин продаёт товары через онлайн-каталог.","sell via a catalogue"],
+    ["Customers can purchase items ___ digital catalogues.",["from"],"Покупатели могут приобретать товары по цифровым каталогам.","purchase items from catalogues"],
+    ["The brand capitalised ___ insights from customer interviews.",["on"],"Бренд извлёк пользу из выводов, полученных на интервью с клиентами.","capitalise on knowledge"],
+    ["The information you need is available ___ your fingertips.",["at"],"Нужная информация доступна прямо под рукой.","at your fingertips"],
+    ["The business drew ___ its savings to fund the redesign.",["on"],"Компания использовала сбережения, чтобы оплатить редизайн.","draw on savings"]
+  ]
+};
+
+if(!modes.some(x=>x[0]==="sentences"))modes.push(["sentences","Предлоги в предложениях"]);
+const ypkSentenceHero=document.createElement("button");
+ypkSentenceHero.className="prep-hero sentence-hero";
+ypkSentenceHero.innerHTML="<b>Предлоги в предложениях</b><span>18 заданий · перевод и повтор ошибок</span>";
+$("prepHero").after(ypkSentenceHero);
+ypkSentenceHero.onclick=()=>setMode("sentences");
+const ypkBaseSetMode=setMode;
+setMode=function(mode){if(mode==="sentences"){state.sentenceQueue=[];state.sentenceResults=[]}ypkBaseSetMode(mode)};
+const ypkBaseRenderPanelForSentences=renderPanel;
+renderPanel=function(){if(state.mode==="sentences")ypkRenderSentence();else ypkBaseRenderPanelForSentences()};
+const ypkBaseCurrentWordForSentences=ypkCurrentWord;
+ypkCurrentWord=function(){if(state.mode==="sentences"){const s=state.sentenceQueue?.[state.i];if(s)return {en:ypkFillSentence(s),ru:s[2]}}return ypkBaseCurrentWordForSentences()};
+const ypkBaseRevealForSentences=ypkReveal;
+ypkReveal=function(){
+  if(state.mode!=="sentences"){ypkBaseRevealForSentences();return}
+  const sentence=state.sentenceQueue?.[state.i];
+  const bar=$("panel").querySelector(".study-tools");
+  let box=$("revealBox");if(!box){box=document.createElement("div");box.id="revealBox";box.className="reveal-box";bar?bar.before(box):$("panel").append(box)}
+  box.innerHTML=sentence?`<b>Правильный ответ</b><span>${esc(ypkFillSentence(sentence))}</span><small><strong>Перевод:</strong> ${esc(sentence[2])}</small><small>${esc(sentence[3])}</small>`:"<b>Серия завершена</b>";
+  const button=$("revealTranslation");if(button)button.textContent="Перевод показан";
+};
+
+function ypkFillSentence(sentence){let index=0;return sentence[0].replace(/___/g,()=>sentence[1][index++])}
+function ypkStartSentences(){state.sentenceUnit=state.unit;state.sentenceQueue=state.randomOrder?shuffle(ypkSentenceBank[state.unit]):[...ypkSentenceBank[state.unit]];state.sentenceCount=state.sentenceQueue.length;state.sentenceResults=[];state.sentenceMistakes=new Map();state.i=0}
+function ypkRenderSentence(){
+  if(state.sentenceUnit!==state.unit||!state.sentenceQueue?.length)ypkStartSentences();
+  const item=state.sentenceQueue[state.i],count=state.sentenceCount;
+  if(!item){
+    const firstTry=state.sentenceResults.slice(0,count).filter(r=>r?.ok).length;
+    const mistakes=[...(state.sentenceMistakes||new Map()).values()];
+    $("panel").innerHTML=`<div class="eyebrow">Предлоги в предложениях · Unit ${state.unit}</div><div class="game-score">${firstTry}/${count}</div><p class="definition">Верно с первой попытки. Предложения с ошибками повторялись до правильного ответа.</p>${mistakes.length?`<div class="test-review"><b>Предложения, в которых были ошибки</b>${mistakes.map(item=>`<div class="test-row bad"><b>${esc(ypkFillSentence(item))}</b><br><small>${esc(item[2])}</small></div>`).join("")}</div>`:'<div class="feedback good">Ошибок не было!</div>'}<div class="actions"><button class="primary" id="sentencesAgain">Новая серия</button></div>`;
+    $("sentencesAgain").onclick=()=>{ypkStartSentences();ypkRenderSentence()};
+    ypkEnsureTools();return;
+  }
+  const answered=state.sentenceResults[state.i],parts=item[0].split("___");
+  const sentenceHtml=parts.map((part,index)=>`${esc(part)}${index<item[1].length?`<input class="sentence-gap" data-gap="${index}" aria-label="Предлог ${index+1}" autocomplete="off" autocapitalize="off" spellcheck="false" ${answered?`value="${esc(answered.values[index])}" disabled`:""}>`:""}`).join("");
+  const progress=Math.round(Math.min(state.i/count,1)*100);
+  $("panel").innerHTML=`<div class="eyebrow">Предлоги в предложениях · Unit ${state.unit} · ${state.i+1} из ${state.sentenceQueue.length}</div><div class="test-progress"><i style="width:${progress}%"></i></div><p class="definition">Впиши подходящие предлоги в пропуски. Регистр букв не важен.</p><div class="sentence-prompt">${sentenceHtml}</div>${answered?`<div class="feedback ${answered.ok?"good":"bad"}">${answered.ok?"Верно!":"Правильный вариант:"} <b>${esc(ypkFillSentence(item))}</b><br><small>${esc(item[2])}</small><br><small>${esc(item[3])}</small></div><div class="actions"><button class="primary" id="sentenceNext">Следующее предложение</button></div>`:`<div class="actions"><button class="primary" id="sentenceCheck">Проверить</button></div><div class="feedback">Можно открыть перевод и объяснение кнопкой ниже.</div>`}`;
+  if(answered){$("sentenceNext").onclick=()=>{state.i++;ypkRenderSentence()}}
+  else{
+    const check=()=>{
+      const values=[...$("panel").querySelectorAll(".sentence-gap")].map(input=>input.value.trim());
+      if(values.some(value=>!value)){const feedback=$("panel").querySelector(".feedback");feedback.textContent="Заполни все пропуски перед проверкой.";return}
+      const ok=values.every((value,index)=>norm(value)===norm(item[1][index]));
+      state.sentenceResults[state.i]={ok,values};
+      if(ok)state.score++;else{state.sentenceQueue.push(item);state.sentenceMistakes.set(item[0],item)}
+      save();renderStats();ypkRenderSentence();
+    };
+    $("sentenceCheck").onclick=check;
+    $("panel").querySelectorAll(".sentence-gap").forEach(input=>input.onkeydown=e=>{if(e.key==="Enter")check()});
+  }
+  ypkEnsureTools();
+}
+renderModes();
+
+</script><script>
+// Finite study rounds and lenient written answers for Units 4–7.
+const ypkRoundModes=new Set(["cards","quiz","type","test","match","odd","lightning"]);
+state.randomOrder=localStorage.getItem("ypk-random-order")==="1";
+state.studyRounds={};
+state.roundOffsets={};
+
+ypkWrittenAnswerMatches=function(answer,term){
+  const clean=value=>norm(String(value??"").normalize("NFKC"))
+    .replace(/\b(?:sb|sth|smb|smth|somebody|someone|something|oneself)\b/g," ")
+    .replace(/\bone s\b/g," ")
+    .replace(/\s+/g," ").trim()
+    .replace(/^(?:to|a|an)\s+/,"").trim();
+  const variants=String(term).includes("with/into")?[String(term).replace("with/into","with"),String(term).replace("with/into","into")]:[term];
+  return clean(answer)!==""&&variants.some(variant=>clean(answer)===clean(variant));
+};
+
+const ypkOrderControl=document.createElement("div");
+ypkOrderControl.className="round-order";
+ypkOrderControl.innerHTML='<button id="randomOrder" type="button"></button><span>Порядок заданий</span>';
+$("modes").after(ypkOrderControl);
+function ypkUpdateOrderButton(){const b=$("randomOrder");b.textContent=state.randomOrder?"Вразброс: включено":"Проходить в разброс";b.setAttribute("aria-pressed",String(state.randomOrder))}
+ypkUpdateOrderButton();
+$("randomOrder").onclick=()=>{
+  state.randomOrder=!state.randomOrder;
+  localStorage.setItem("ypk-random-order",state.randomOrder?"1":"0");
+  state.studyRounds={};state.i=0;
+  state.prepQueue=[];state.sentenceQueue=[];
+  ypkUpdateOrderButton();
+  if(state.mode==="prep")prep(true);else if(state.mode==="sentences")ypkRenderSentence();else renderPanel();
+};
+
+function ypkRoundSize(mode){return mode==="cards"?U().words.length:mode==="match"?6:15}
+function ypkStartRound(mode){
+  const words=U().words,size=Math.min(ypkRoundSize(mode),words.length),key=`${state.unit}:${mode}`;
+  const offset=state.roundOffsets[key]||0;
+  const items=state.randomOrder?shuffle(words).slice(0,size):Array.from({length:size},(_,i)=>words[(offset+i)%words.length]);
+  if(!state.randomOrder)state.roundOffsets[key]=(offset+size)%words.length;
+  const round={unit:state.unit,items,initialItems:[...items],index:0,answers:[],finished:false,left:null,right:null,matched:new Set(),creditedPairs:new Set(),history:[],attemptHistory:[],firstResults:new Map(),mistakes:new Map(),matchMistakes:new Set(),oddTargets:new Map(),seconds:30};
+  if(mode==="match")round.rightOrder=shuffle(items.map((w,i)=>({i,ru:w.ru})));
+  state.studyRounds[mode]=round;state.i=0;
+  if(mode==="lightning")ypkStartLightningTimer(round);
+  return round;
+}
+function ypkRound(mode){const r=state.studyRounds[mode];return !r||r.unit!==state.unit?ypkStartRound(mode):r}
+function ypkRoundWord(){const r=ypkRound(state.mode);return r.items[Math.min(r.index,r.items.length-1)]}
+function ypkAdvanceRound(mode,value,ok){
+  const r=ypkRound(mode),w=r.items[r.index];if(!w||r.index>=r.items.length)return;
+  r.attemptHistory.push({index:r.index,items:[...r.items],answers:[...r.answers],firstResults:new Map(r.firstResults),mistakes:new Map(r.mistakes)});
+  if(!r.firstResults.has(w.en))r.firstResults.set(w.en,ok);
+  r.answers[r.index]={value,ok};
+  if(!ok){
+    const reviewed=mode==="odd"?r.oddTargets.get(w.en)||w:w;
+    r.mistakes.set(reviewed.en,{w:reviewed,value});
+    r.items.push(w);
+  }else if(!r.creditedPairs.has(w.en)){
+    learn(w.en);r.creditedPairs.add(w.en);
+  }
+  r.index++;state.i=r.index;
+  renderPanel();
+}
+function ypkUndoRound(mode){
+  const r=ypkRound(mode),prior=r.attemptHistory.pop();
+  if(!prior)return false;
+  r.index=prior.index;r.items=prior.items;r.answers=prior.answers;
+  r.firstResults=prior.firstResults;r.mistakes=prior.mistakes;
+  r.finished=false;state.i=r.index;state.flip=false;renderPanel();return true;
+}
+function ypkRoundComplete(mode){
+  const r=ypkRound(mode),total=r.initialItems.length;
+  const correct=mode==="match"?total-r.matchMistakes.size:r.initialItems.filter(w=>r.firstResults.get(w.en)===true).length;
+  r.finished=true;clearInterval(state.timer);
+  const mistakes=mode==="match"?[...r.matchMistakes].map(i=>({w:r.items[i]})):[...r.mistakes.values()];
+  const detail=mode==="match"?"Пар найдено без ошибок":mode==="lightning"?"Верно с первой попытки до конца времени":"Верно с первой попытки. Ошибки повторялись до правильного ответа";
+  $("panel").innerHTML=`<div class="eyebrow">${r.timedOut?"Время вышло":"Раунд окончен"} · Unit ${state.unit}</div><div class="game-score">${correct}/${total}</div><p class="definition">${detail}. Можно начать новую серию.</p>${mistakes.length?`<div class="test-review"><b>Слова, в которых были ошибки</b>${mistakes.map(({w,value})=>`<div class="test-row bad"><b>${esc(w.en)} — ${esc(w.ru)}</b>${value?`<br><small>Ответ с ошибкой: ${esc(value)}</small>`:""}${w.def?`<br><small>${esc(w.def)}</small>`:""}</div>`).join("")}</div>`:'<div class="feedback good">Ошибок не было!</div>'}<div class="actions"><button class="primary" id="roundRestart">Начать заново</button>${mode==="match"&&r.history.length||mode!=="match"&&r.attemptHistory.length&&!r.timedOut?'<button class="secondary" id="roundBack">← К последнему заданию</button>':""}</div>`;
+  $("roundRestart").onclick=()=>{ypkStartRound(mode);renderPanel()};
+  if($("roundBack"))$("roundBack").onclick=()=>{if(mode==="match"){r.finished=false;r.matched.delete(r.history.pop());ypkRoundMatch()}else ypkUndoRound(mode)};
+}
+function ypkRoundHeader(title,r){return `<div class="eyebrow">${title} · ${Math.min(r.index+1,r.items.length)} из ${r.items.length}</div><div class="test-progress"><i style="width:${Math.round(r.index/r.items.length*100)}%"></i></div>`}
+
+function ypkRoundCards(){
+  const r=ypkRound("cards");if(r.index>=r.items.length)return ypkRoundComplete("cards");
+  const w=r.items[r.index];
+  $("panel").innerHTML=`${ypkRoundHeader("Карточки",r)}<div class="prompt">${esc(w.en)}</div>${state.flip?`<p class="definition">${esc(w.def)}</p><span class="translation">${esc(w.ru)}</span>`:'<p class="definition">Попробуй вспомнить перевод, затем открой карточку.</p>'}<div class="actions"><button class="primary" id="flip">${state.flip?"Скрыть ответ":"Показать объяснение и перевод"}</button>${state.flip?'<button class="secondary" id="yes">Знаю</button><button class="secondary danger" id="no">Повторить позже</button>':""}</div>`;
+  $("flip").onclick=()=>{state.flip=!state.flip;ypkRoundCards()};
+  if(state.flip){$("yes").onclick=()=>{state.flip=false;ypkAdvanceRound("cards","Знаю",true)};$("no").onclick=()=>{state.flip=false;ypkAdvanceRound("cards","Повторить",false)}}
+}
+function ypkRoundChoice(mode,title,prompt,opts,correct){
+  const r=ypkRound(mode);if(r.index>=r.items.length)return ypkRoundComplete(mode);
+  const old=r.answers[r.index];
+  $("panel").innerHTML=`${ypkRoundHeader(title,r)}<div class="prompt">${esc(prompt)}</div><div class="choices">${opts.map(o=>`<button class="choice" data-round-choice="${esc(o.key)}">${esc(o.label)}</button>`).join("")}</div><div class="feedback">${old?`Ранее записано: ${esc(old.value)}. Можно выбрать другой ответ.`:"Выбери ответ — сразу появится следующее задание."}</div>`;
+  $("panel").querySelectorAll("[data-round-choice]").forEach(b=>b.onclick=()=>{const option=opts.find(o=>o.key===b.dataset.roundChoice);ypkAdvanceRound(mode,option.label,option.key===correct)});
+}
+function ypkRoundQuiz(){
+  const r=ypkRound("quiz");if(r.index>=r.items.length)return ypkRoundComplete("quiz");
+  const w=r.items[r.index],opts=shuffle([w,...shuffle(U().words.filter(x=>x!==w)).slice(0,3)]).map(x=>({key:x.en,label:x.ru}));
+  ypkRoundChoice("quiz","Учить · выбери перевод",w.en,opts,w.en);
+}
+function ypkRoundType(){
+  const r=ypkRound("type");if(r.index>=r.items.length)return ypkRoundComplete("type");
+  const w=r.items[r.index],old=r.answers[r.index];
+  $("panel").innerHTML=`${ypkRoundHeader("Переведи на английский",r)}<div class="prompt">${esc(w.ru)}</div><p class="definition">Подсказка: ${esc(w.def)}</p><div class="inputrow"><input id="answer" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Английское слово или выражение" value="${esc(old?.value||"")}"><button class="primary" id="check">Ответить</button></div><p class="round-hint">Можно опустить начальное to и пометы sb, sth. Ошибки покажем в конце.</p><div class="actions"><button class="secondary" id="skip">Пропустить</button></div>`;
+  const submit=()=>{const value=$("answer").value.trim();if(!value){$("answer").focus();return}ypkAdvanceRound("type",value,ypkWrittenAnswerMatches(value,w.en))};
+  $("check").onclick=submit;$("answer").onkeydown=e=>{if(e.key==="Enter")submit()};$("skip").onclick=()=>ypkAdvanceRound("type","",false);$("answer").focus();
+}
+function ypkRoundTest(){
+  const r=ypkRound("test");if(r.index>=r.items.length)return ypkRoundComplete("test");
+  const w=r.items[r.index],old=r.answers[r.index],written=r.initialItems.indexOf(w)%2===0;
+  let task;
+  if(written)task=`<div class="inputrow"><input id="testInput" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Английское слово или выражение" value="${esc(old?.value||"")}"><button class="primary" id="testCheck">Ответить</button></div>`;
+  else{const opts=shuffle([w,...shuffle(U().words.filter(x=>x!==w)).slice(0,3)]);task=`<div class="choices">${opts.map(x=>`<button class="choice" data-test-answer="${esc(x.en)}">${esc(x.en)}</button>`).join("")}</div>`}
+  $("panel").innerHTML=`${ypkRoundHeader("Тест · русский → английский",r)}<div class="prompt">${esc(w.ru)}</div><p class="definition">${esc(w.def)}</p>${task}<p class="round-hint">Ответ проверяется после серии. Начальное to и пометы sb, sth можно опустить.</p><div class="actions"><button class="secondary" id="testSkip">Пропустить</button></div>`;
+  if(written){const submit=()=>{const value=$("testInput").value.trim();if(value)ypkAdvanceRound("test",value,ypkWrittenAnswerMatches(value,w.en))};$("testCheck").onclick=submit;$("testInput").onkeydown=e=>{if(e.key==="Enter")submit()};$("testInput").focus()}
+  else $("panel").querySelectorAll("[data-test-answer]").forEach(b=>b.onclick=()=>ypkAdvanceRound("test",b.dataset.testAnswer,b.dataset.testAnswer===w.en));
+  $("testSkip").onclick=()=>ypkAdvanceRound("test","",false);
+}
+function ypkRoundOdd(){
+  const r=ypkRound("odd");if(r.index>=r.items.length)return ypkRoundComplete("odd");
+  const other=Object.keys(units).filter(u=>u!==state.unit),foreign=units[other[(r.index)%other.length]].words;
+  const ownWord=r.items[r.index];
+  if(!r.oddTargets.has(ownWord.en))r.oddTargets.set(ownWord.en,state.randomOrder?shuffle(foreign)[0]:foreign[r.index%foreign.length]);
+  const wrong=r.oddTargets.get(ownWord.en);
+  const own=[r.items[r.index],...U().words.filter(x=>x!==r.items[r.index]).slice(r.index,r.index+2)];
+  const opts=shuffle([...own,wrong]).map(x=>({key:x.en,label:`${x.en} — ${x.def}`}));
+  ypkRoundChoice("odd","Лишнее слово",`Какое слово не относится к Unit ${state.unit}?`,opts,wrong.en);
+}
+function ypkRoundMatch(){
+  const r=ypkRound("match");if(r.matched.size===r.items.length)return ypkRoundComplete("match");
+  $("panel").innerHTML=`<div class="eyebrow">Собери пару · ${r.matched.size} из ${r.items.length}</div><p class="definition">Соедини английские выражения с русским переводом.</p><div class="match"><div class="matchcol">${r.items.map((w,i)=>`<button data-match-left="${i}" class="${r.matched.has(i)?"done":""}">${esc(w.en)}</button>`).join("")}</div><div class="matchcol">${r.rightOrder.map(x=>`<button data-match-right="${x.i}" class="${r.matched.has(x.i)?"done":""}">${esc(x.ru)}</button>`).join("")}</div></div><div class="feedback" id="matchFeedback">${r.matched.size} пар найдено.</div><div class="actions"><button class="secondary" id="matchBack" ${r.history.length?"":"disabled"}>← Отменить последнюю пару</button></div>`;
+  const choose=(side,i)=>{if(r.matched.has(i))return;r[side]=i;$("panel").querySelectorAll(`[data-match-${side}]`).forEach(b=>b.classList.toggle("sel",Number(b.dataset[side==="left"?"matchLeft":"matchRight"])===i));if(r.left===null||r.right===null)return;if(r.left===r.right){r.matched.add(i);r.history.push(i);if(!r.creditedPairs.has(i)){learn(r.items[i].en);r.creditedPairs.add(i)}r.left=r.right=null;ypkRoundMatch()}else{r.matchMistakes.add(r.left);r.matchMistakes.add(r.right);$("matchFeedback").textContent="Пара не совпала. Попробуй ещё раз.";r.left=r.right=null;$("panel").querySelectorAll(".match .sel").forEach(b=>b.classList.remove("sel"))}};
+  $("panel").querySelectorAll("[data-match-left]").forEach(b=>b.onclick=()=>choose("left",Number(b.dataset.matchLeft)));
+  $("panel").querySelectorAll("[data-match-right]").forEach(b=>b.onclick=()=>choose("right",Number(b.dataset.matchRight)));
+  $("matchBack").onclick=()=>{if(r.history.length){r.matched.delete(r.history.pop());ypkRoundMatch()}};
+}
+function ypkStartLightningTimer(r){clearInterval(state.timer);state.timer=setInterval(()=>{if(state.mode!=="lightning"||state.studyRounds.lightning!==r){clearInterval(state.timer);return}r.seconds--;const t=$("time"),bar=$("timebar");if(t)t.textContent=r.seconds;if(bar)bar.style.width=`${Math.max(0,r.seconds)/30*100}%`;if(r.seconds<=0){r.timedOut=true;r.finished=true;ypkRoundComplete("lightning")}},1000)}
+function ypkRoundLightning(){
+  const r=ypkRound("lightning");if(r.index>=r.items.length||r.finished)return ypkRoundComplete("lightning");
+  const w=r.items[r.index],opts=shuffle([w,...shuffle(U().words.filter(x=>x!==w)).slice(0,2)]);
+  $("panel").innerHTML=`<div class="eyebrow">Молния · ${r.index+1} из ${r.items.length} · <span id="time">${r.seconds}</span> сек</div><div class="timer"><i id="timebar" style="width:${r.seconds/30*100}%"></i></div><div class="prompt">${esc(w.ru)}</div><div class="choices">${opts.map(x=>`<button class="choice" data-lightning="${esc(x.en)}">${esc(x.en)}</button>`).join("")}</div>`;
+  $("panel").querySelectorAll("[data-lightning]").forEach(b=>b.onclick=()=>ypkAdvanceRound("lightning",b.dataset.lightning,b.dataset.lightning===w.en));
+}
+
+const ypkPreviousSetModeForRounds=setMode;
+setMode=function(mode){if(ypkRoundModes.has(mode))state.studyRounds[mode]=null;ypkPreviousSetModeForRounds(mode)};
+const ypkPreviousRenderPanelForRounds=renderPanel;
+renderPanel=function(){
+  if(!ypkRoundModes.has(state.mode))return ypkPreviousRenderPanelForRounds();
+  if(state.mode!=="lightning")clearInterval(state.timer);
+  ({cards:ypkRoundCards,quiz:ypkRoundQuiz,type:ypkRoundType,test:ypkRoundTest,match:ypkRoundMatch,odd:ypkRoundOdd,lightning:ypkRoundLightning})[state.mode]();
+  ypkEnsureTools();
+};
+const ypkPreviousCurrentWordForRounds=ypkCurrentWord;
+ypkCurrentWord=function(){return ypkRoundModes.has(state.mode)?ypkRoundWord():ypkPreviousCurrentWordForRounds()};
+const ypkPreviousEnsureToolsForRounds=ypkEnsureTools;
+ypkEnsureTools=function(){if(ypkRoundModes.has(state.mode)&&state.studyRounds[state.mode]?.finished)return;ypkPreviousEnsureToolsForRounds()};
+const ypkPreviousBackForRounds=ypkPrevious;
+ypkPrevious=function(){
+  if(!ypkRoundModes.has(state.mode))return ypkPreviousBackForRounds();
+  const r=ypkRound(state.mode);if(state.mode==="match"){if(r.history.length){r.matched.delete(r.history.pop());ypkRoundMatch()}return}
+  if(r.timedOut)return;
+  if(ypkUndoRound(state.mode))return;
+  const note=$("toolNote");if(note)note.textContent="Это первое задание в режиме";
+};
+document.addEventListener("keydown",e=>{
+  if(e.key!=="ArrowRight"||!ypkRoundModes.has(state.mode))return;
+  e.stopImmediatePropagation();e.preventDefault();
+  if(["type","test","quiz","odd","lightning"].includes(state.mode))return;
+  if(state.mode==="cards")return;
+},true);
+renderPanel();
+
+</script><script>
+// GitHub Pages has no write API. Corrections are saved locally and can be exported
+// as translations.json for publication in the repository.
+const ypkDraftKey = "ypk-pages-translation-drafts-v1";
+let ypkPublishedTranslations = [];
+let ypkDraftTranslations = [];
+
+function ypkValidTranslation(row) {
+  return row && /^[4-7]$/.test(String(row.unit)) &&
+    typeof row.term === "string" && typeof row.ru === "string" &&
+    row.ru.trim().length > 0 && row.ru.trim().length <= 180 &&
+    units[String(row.unit)]?.words.some(word => word.en === row.term);
+}
+
+function ypkReadDrafts() {
+  try {
+    const rows = JSON.parse(localStorage.getItem(ypkDraftKey) || "[]");
+    return Array.isArray(rows) ? rows.filter(ypkValidTranslation) : [];
+  } catch { return []; }
+}
+
+function ypkMergedTranslations() {
+  const rows = new Map();
+  for (const row of [...ypkPublishedTranslations, ...ypkDraftTranslations]) {
+    if (ypkValidTranslation(row)) rows.set(`${row.unit}\u0000${row.term}`, {
+      unit: String(row.unit), term: row.term, ru: row.ru.trim()
+    });
+  }
+  return [...rows.values()].sort((a,b) =>
+    a.unit.localeCompare(b.unit) || a.term.localeCompare(b.term));
+}
+
+function ypkApplyTranslation(row) {
+  const word = units[row.unit].words.find(item => item.en === row.term);
+  if (!word) return;
+  const previous = word.ru;
+  word.ru = row.ru;
+  for (const pair of units[row.unit].preps) {
+    if (pair[2] === previous && pair[0].replace("___", pair[1]).toLowerCase() === row.term.toLowerCase()) {
+      pair[2] = row.ru;
+    }
+  }
+}
+
+function ypkRefreshTranslations() {
+  renderList($("search").value);
+  renderPanel();
+}
+
+function ypkUpdateExportButton() {
+  ypkExportButton.hidden = ypkDraftTranslations.length === 0;
+}
+
+ypkDraftTranslations = ypkReadDrafts();
+for (const row of ypkDraftTranslations) ypkApplyTranslation(row);
+
+fetch("translations.json", {cache:"no-store"})
+  .then(response => response.ok ? response.json() : [])
+  .then(rows => {
+    ypkPublishedTranslations = Array.isArray(rows) ? rows.filter(ypkValidTranslation) : [];
+    for (const row of ypkPublishedTranslations) ypkApplyTranslation(row);
+    for (const row of ypkDraftTranslations) ypkApplyTranslation(row);
+    ypkRefreshTranslations();
+  })
+  .catch(() => {});
+
+const ypkExportButton = document.createElement("button");
+ypkExportButton.type = "button";
+ypkExportButton.className = "secondary github-export";
+ypkExportButton.textContent = "Скачать исправления для GitHub";
+ypkOrderControl.after(ypkExportButton);
+ypkExportButton.onclick = () => {
+  const content = JSON.stringify(ypkMergedTranslations(), null, 2) + "\n";
+  const blob = new Blob([content], {type:"application/json"});
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "translations.json";
+  document.body.append(link);
+  link.click();
+  link.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+};
+ypkUpdateExportButton();
+
+function ypkEditTranslation(unit, term) {
+  const word = units[unit]?.words.find(item => item.en === term);
+  if (!word) return;
+  document.querySelector("#translationEdit")?.remove();
+  const box = document.createElement("div");
+  box.id = "translationEdit";
+  box.className = "translation-edit";
+  box.innerHTML = `<form id="translationForm"><label for="translationInput">Исправить перевод: <b>${esc(word.en)}</b></label><textarea id="translationInput" maxlength="180" rows="2" required>${esc(word.ru)}</textarea><div class="translation-edit-actions"><button class="primary" type="submit">Сохранить</button><button class="secondary" id="translationCancel" type="button">Отмена</button></div><p>Исправление сохранится в этом браузере. Чтобы его увидели все, скачайте файл исправлений и загрузите его в репозиторий GitHub.</p></form>`;
+  const bar = $("panel").querySelector(".study-tools");
+  bar ? bar.before(box) : $("panel").append(box);
+  box.querySelector("#translationCancel").onclick = () => box.remove();
+  box.querySelector("form").onsubmit = event => {
+    event.preventDefault();
+    const ru = box.querySelector("#translationInput").value.trim();
+    if (!ru) return;
+    const row = {unit, term, ru};
+    ypkDraftTranslations = ypkDraftTranslations.filter(item =>
+      !(item.unit === unit && item.term === term));
+    ypkDraftTranslations.push(row);
+    try { localStorage.setItem(ypkDraftKey, JSON.stringify(ypkDraftTranslations)); }
+    catch { alert("Не удалось сохранить исправление в браузере."); return; }
+    ypkApplyTranslation(row);
+    ypkUpdateExportButton();
+    ypkRefreshTranslations();
+  };
+  box.querySelector("textarea").focus();
+}
+
+const ypkPreviousEnsureToolsForTranslations = ypkEnsureTools;
+ypkEnsureTools = function() {
+  ypkPreviousEnsureToolsForTranslations();
+  if (!["cards","quiz","type","test","lightning"].includes(state.mode)) return;
+  const bar = $("panel").querySelector(".study-tools");
+  if (!bar || bar.querySelector("#editTranslation")) return;
+  const current = ypkCurrentWord();
+  if (!units[state.unit]?.words.some(word => word.en === current.en)) return;
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = "study-tool edit-translation-button";
+  button.id = "editTranslation";
+  button.textContent = "✎ Исправить";
+  $("revealTranslation")?.after(button);
+  button.onclick = () => ypkEditTranslation(state.unit, current.en);
+};
+
+const ypkPreviousRenderListForTranslations = renderList;
+renderList = function(q = "") {
+  ypkPreviousRenderListForTranslations(q);
+  $("list").querySelectorAll(".word").forEach(card => {
+    const term = card.querySelector("b")?.textContent;
+    if (!term) return;
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "word-edit";
+    button.title = `Исправить перевод: ${term}`;
+    button.setAttribute("aria-label", button.title);
+    button.textContent = "✎";
+    button.onclick = () => ypkEditTranslation(state.unit, term);
+    card.append(button);
+  });
+};
+renderList($("search").value);
+ypkEnsureTools();
+
+</script></body></html>
